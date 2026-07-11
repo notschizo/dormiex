@@ -7,7 +7,7 @@ export class TwitchEventSub {
 		this.env = env;
 		this.ws = null;
 		this.sessionId = null;
-		console.log("we\'re alive probably");
+		console.log("we're alive probably");
 	}
 
 	async getAccessToken() {

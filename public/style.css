@@ -1,0 +1,117 @@
+body, html {
+	height: 100%;
+}
+
+:root {
+	--container-bg: rgba(88, 88, 88, 0.9);
+	--card-bg: rgba(88, 88, 88, 1);
+	--twitch-color: rgba(100, 65, 165, 1);
+	--yt-color: rgba(178, 7, 29, 1);
+	--twitter-color: black;
+}
+
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+.bg-image {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	background-image: url("./img/mimi.jpg");
+	z-index: 0;
+	filter: blur(8px);
+	-webkit-filter: blur(8px);
+
+	height: 100%;
+
+	background-position: center;
+	background-size: cover;
+	background-repeat: no-repeat;
+}
+
+.the-main-thing-box-thing {
+	position: fixed;
+	height: 80%;
+	top: 50%;
+	left: 50%;
+	z-index: 2;
+	border: 1px solid var(--container-bg);
+	border-radius: 24px;
+	text-align: center;
+	background: var(--container-bg);
+	width: 80%;
+	padding: 20px;
+	transform: translate(-50%, -50%);
+}
+
+.evil-ass-yearn-timer {
+	position:fixed;
+	height: 20%;
+	width: 80%;
+	top: 70%;
+	left: 50%;
+	z-index: 3;
+	transform: translate(-50%, -50%);
+	background: var(--card-bg);
+}
+
+.there-has-to-be-a-news-ticker {
+	display: flex;
+	position: fixed;
+	height: 5%;
+	top: 0%;
+	left: 0%;
+	z-index: 2;
+	background: var(--container-bg);
+	width: 100%;
+	align-items: center;
+	justify-content: center;
+}
+
+.twitch {
+	position: fixed;
+	height: 7%;
+	width: 15%;
+	top: 7%;
+	left: 3%;
+	z-index: 3;
+	background: var(--twitch-color);
+	border-radius: 8px;
+}
+
+.yt {
+	position: fixed;
+	height: 7%;
+	width: 15%;
+	top: 17%;
+	left: 3%;
+	z-index: 3;
+	background: var(--yt-color);
+	border-radius: 8px;
+}
+
+.twitter {
+	position: fixed;
+	height: 7%;
+	width: 15%;
+	top: 27%;
+	left: 3%;
+	z-index: 3;
+	background: var(--twitter-color);
+	border-radius: 8px;
+}
+
+.icon {
+	clip-path: circle(50%);
+	position: fixed;
+	z-index: 3;
+	left: 20%;
+}
+
+.obituary-text {
+	position: fixed;
+}

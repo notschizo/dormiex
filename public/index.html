@@ -7,7 +7,7 @@
 <p id="timestampThing"></p>
 
 <script type="module">
-import { fetchStreamStatus, getOfflineDate, getOfflineTime } from './src/index.js';
+import { fetchStreamStatus, getOfflineDate, formatMilliseconds } from './src/index.js';
 var status = await fetchStreamStatus();
 var offlineDate = await getOfflineDate();
 function render() {
@@ -15,7 +15,7 @@ function render() {
 	if (status.isLive) {
 		el.innerHTML = "wow im living it(??)";
 	} else {
-		el.innerHTML = offlineDate ? getOfflineTime(offlineDate) : "";
+		el.innerHTML = offlineDate ? formatMilliseconds(offlineDate) : "";
 	}
 }
 render();

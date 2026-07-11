@@ -6,23 +6,56 @@ export async function fetchStreamStatus() {
 export async function getOfflineDate() {
 	var status = await fetchStreamStatus();
 	if (!status.offlineTimestamp) return null;
-	var offlineTime = new Date();
-	offlineTime.setTime(status.offlineTimestamp * 1000);
+	let offlineTime = new Date(status.offlineTimestamp * 1000);
 	return offlineTime;
 }
 
-export function getOfflineTime(offlineTime) {
-	var now = new Date().getTime();
-	var distance = Math.abs(offlineTime - now);
+function getTimeStampOffset(date) {
+	let nowTimeStamp = new Date().getTime();
+	let offset = Math.abs(nowTimeStamp - date.getTime());
+	return offset;
+}
 
-	var days = ('0' + Math.floor(distance / (1000 * 60 * 60 * 24))).slice(-2);
-	var hours = ('0' + Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).slice(-2);
-	var minutes = ('0' + Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))).slice(-2);
-	var seconds = ('0' + Math.floor((distance % (1000 * 60)) / 1000)).slice(-2);
+function getOfflineTime(offlineTimeStamp) {
+	return formatMilliseconds(getTimeStampOffset(offlineTimeStamp));
+}
 
-	var formattedTime = days + ":" + hours + ":" + minutes + ":" + seconds;
-	while(formattedTime.charAt(0) === '0' || formattedTime.charAt(0) === ':') {
-		formattedTime = formattedTime.substring(1);
+function getBirthdayCountdown() {
+	return formatMilliseconds(getTimeStampOffset(getBirthDate()));
+}
+
+function getBirthDate() {
+	let currentTimeStamp = new Date();
+	let currentYear = currentTimeStamp.getFullYear();
+	let birthDate = new Date(`July 18, ${currentYear} 00:00:00 GMT-06:00`);
+	let birthdayPassed = currentTimeStamp >= birthDate;
+	if (birthdayPassed) {
+		birthDate.setFullYear(currentYear + 1);
+	}
+	return birthDate;
+}
+
+function getTimeIntervals(milliseconds) {
+	let days = Math.floor(milliseconds / (1000 * 60 * 60 * 24));
+	let hours = Math.floor((milliseconds % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+	let minutes = Math.floor((milliseconds % (1000 * 60 * 60)) / (1000 * 60));
+	let seconds = Math.floor((milliseconds % (1000 * 60)) / 1000);
+	return [days, hours, minutes, seconds];
+}
+
+// formatMilliseconds
+function formatMilliseconds(milliseconds) {
+	let formattedTime;
+	let timeIntervals = getTimeIntervals(milliseconds);
+	for (let i = 0; i < timeIntervals.length; i++) {
+		let interval = String(timeIntervals[i]).padStart(2, "0");
+		if (interval !== "00" || formattedTime !== undefined) {
+			if (formattedTime === undefined) {
+				formattedTime = interval;
+			} else {
+				formattedTime += `:${interval}`;
+			}
+		}
 	}
 	return formattedTime;
 }
