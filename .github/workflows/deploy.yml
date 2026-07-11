@@ -1,0 +1,37 @@
+name: Deploy to Cloudflare Workers
+
+on:
+    push:
+        branches: [main]
+    workflow_dispatch:
+
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+        name: Deploy
+        steps:
+            - uses: actions/checkout@v6
+            - uses: actions/setup-node@v6
+              with:
+                node-version: '24.18.0'
+                cache: 'npm'
+
+            - name: Create wrangler.toml
+              run: |
+                cat << EOF > wrangler.toml
+                name = "${{ vars.CF_WORKER_NAME }}"
+                account_id = "${{ secrets.CF_ACCOUNT_ID }}"
+                assets = { directory = "./public" }
+                compatibility_date = "${{ vars.CF_COMPATIBILITY_DATE }}"
+                send_metrics = false
+                workers_dev = false
+                preview_urls = false
+                EOF
+            - name: Deploy with Wrangler
+              uses: cloudflare/wrangler-action@v4
+              env:
+                CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+              with:
+                apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+                accountId: ${{ secrets.CF_ACCOUNT_ID }}
+                command: deploy

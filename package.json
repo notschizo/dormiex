@@ -1,0 +1,12 @@
+{
+  "name": "fuck-it-mimi-time",
+  "version": "1.0.0",
+  "description": "ouse",
+  "scripts": {
+    "start": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "^3.109.0"
+  }
+}
