@@ -20,12 +20,27 @@ jobs:
               run: |
                 cat << EOF > wrangler.toml
                 name = "${{ vars.CF_WORKER_NAME }}"
+                main = "src/worker.js"
                 account_id = "${{ secrets.CF_ACCOUNT_ID }}"
-                assets = { directory = "./public" }
                 compatibility_date = "${{ vars.CF_COMPATIBILITY_DATE }}"
                 send_metrics = false
                 workers_dev = false
                 preview_urls = false
+                [assets]
+                directory = "./public"
+                binding = "ASSETS"
+                [[kv_namespaces]]
+                binding = "STREAM_DATA"
+                id = "${{ secrets.CF_KV_ID }}"
+                preview_id = "${{ secrets.CF_KV_PREVIEW_ID }}"
+                [[durable_objects.bindings]]
+                name = "TWITCH_EVENTSUB"
+                class_name = "TwitchEventSub"
+                [[migrations]]
+                tag = "v1"
+                new_sqlite_classes = ["TwitchEventSub"]
+                [triggers]
+                crons = ["*/5 * * * *"]
                 EOF
             - name: Deploy with Wrangler
               uses: cloudflare/wrangler-action@v4
