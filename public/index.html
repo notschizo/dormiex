@@ -6,20 +6,28 @@
 <h6>test</h6>
 <p id="timestampThing"></p>
 <p id="birthdayTimestampThing"></p>
+<p id="sorryCount"></p>
 
 <script type="module">
 import { fetchStreamStatus, getOfflineDate, getOfflineTime, getBirthdayCountdown } from './src/index.js';
+
 var status = await fetchStreamStatus();
 var offlineDate = await getOfflineDate();
+
 function render() {
 	var timer = document.getElementById("timestampThing");
 	var birthdayTimer = document.getElementById("birthdayTimestampThing");
+	var sorryCounter = document.getElementById("sorryCount");
+
 	if (status.isLive) {
-		timer.innerHTML = "wow im living it(??)";
+		timer.innerHTML = "we're probably live i hope";
 	} else {
 		timer.innerHTML = offlineDate ? getOfflineTime(offlineDate) : "";
 	}
 	birthdayTimer.innerHTML = getBirthdayCountdown();
+	if (sorryCounter && status.sorryCount) {
+        sorryCounter.innerHTML = `nemimi has apologized ${status.sorryCount} times!`;
+	}
 }
 render();
 setInterval(render, 1000);

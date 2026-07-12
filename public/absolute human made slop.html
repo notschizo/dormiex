@@ -1,19 +1,85 @@
  <!DOCTYPE html>
 <html lang="en">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="style.css" type="text/css">
+<script src="https://unpkg.com/@twemoji/api@latest/dist/twemoji.min.js" crossorigin="anonymous"></script>
+
+<script>
+	let toggle = true;
+
+	function changeToggle() {
+		let inner;
+		let border;
+		let icon;
+		if (toggle == true) {
+			inner = "rgba(76, 245, 39, 0.5)";
+			border = "green";
+			icon = "mimi-icon"
+			toggle = false;
+		} else {
+			inner = "rgba(255, 54, 54, 0.5)";
+			border = "red";
+			icon = "mimi-icon-offline"
+			toggle = true;
+		}
+		render(inner, border, icon);
+	}
+
+	function render(inner = "rgba(255, 54, 54, 0.5)", border = "red", icon = "mimi-icon-offline") {
+		document.documentElement.style.setProperty("--online-color", inner);
+		document.documentElement.style.setProperty("--online-border", border);
+
+		let frontImage = document.getElementById("mimi-icon-front");
+		let backImage = document.getElementById("mimi-icon-back");
+		let newIcon = "./img/" + icon + ".png";
+		backImage.setAttribute("src", newIcon);
+		frontImage.classList.add("fade-out");
+
+		setTimeout(() => {
+			frontImage.setAttribute("src", newIcon);
+			frontImage.classList.remove("fade-out");
+		}, 300);
+	}
+
+	document.addEventListener("DOMContentLoaded", function() {
+	twemoji.parse(document.body);
+	render();
+	});
+
+</script>
 
 <body>
 
 <div class="bg-image"></div>
-<div class="there-has-to-be-a-news-ticker">
-	<h1>oh fuck yeah a news ticker</h1>
-</div>
 <div class="the-main-thing-box-thing">
-	<div class="icon"><img src="./img/mimi-icon-offline.png" alt="SHES DEAD"></div>
-	<div class="twitch"></div>
-	<div class="yt"></div>
-	<div class="twitter"></div>
-	<div class="evil-ass-yearn-timer"></div>
+
+	<div class="icon" style="position: relative; width: 150px; height: 150px;">
+		<img id="mimi-icon-back" src="./img/mimi-icon-offline.png" height="150" width="150" style="position: absolute;">
+
+		<img id="mimi-icon-front" src="./img/mimi-icon-offline.png" height="150" width="150" style="position: absolute; z-index: 2;">
+	</div>
+	<h1 class="title-card">Nemimi Yane</h1>
+	<h1 class="oshi-mark">🐁🪤</h1>
+	<button id="obituary-text" class="obituary-text" onclick="changeToggle()"></button>
+
+	<a href="https://twitch.tv/NemimiYane" target="_blank">
+		<div class="socials twitch"><h1>twitch</h1></div>
+	</a>
+	<a href="https://youtube.com/NemimiYane" target="_blank">
+		<div class="socials yt"><h1>youtube</h1></div>
+	</a>
+	<a href="https://x.com/NemimiYane" target="_blank">
+		<div class="socials twitter"><h1>twitter</h1></div>
+	</a>
+	<a href="https://marshmallow-qa.com/nemimi" target="_blank">
+		<div class="socials maro"><h1>maro</h1></div>
+	</a>
+
+
+	<div class="divider"></div>
+	<div class="timer-label"><h1>Time since last seen:</h1></div>
+	<div class="evil-ass-yearn-timer"><div class="timer-actual-time">timer</div></div>
+
 </div>
 </div>
 

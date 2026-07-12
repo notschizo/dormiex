@@ -152,12 +152,6 @@ export class TwitchEventSub {
 			console.log(`got welcome with id ${this.sessionId}`);
 			await this.subscribe(this.sessionId);
 			await this.syncInitialState();
-
-			try {
-				await this.subscribe(this.sessionId);
-			} catch (err) {
-				console.error('sub failed: ', err);
-			}
 		} else if (type === 'session_reconnect') {
 			console.log('reconnect requested');
 			const oldWs = this.ws;
@@ -174,6 +168,19 @@ export class TwitchEventSub {
 			} else if (subType === 'stream.online') {
 				await this.env.STREAM_DATA.put('is_live', 'true');
 				console.log('kv updated to online');
+			} else if (subType === 'channel.chat.message') {
+				const event = msg.payload.event;
+
+				if (event.chatter_user_id === '19264788') {
+					const messageText = event.message.text;
+					const match = messageText.match(/nemimi has apologized (\d+) times!/i);
+
+					if (match) {
+						const extractedNumber = parseInt(match[1], 10);
+						console.log(`new sorry count: ${extractedNumber}`);
+						await this.env.STREAM_DATA.put('sorry_count', extractedNumber.toString());
+					}
+				}
 			}
 		} else if (type === 'session_keepalive') {
 		}
@@ -190,37 +197,43 @@ export class TwitchEventSub {
 			'Content-Type': 'application/json',
 		};
 
-		const types = ['stream.online', 'stream.offline'];
+		const channelId = this.env.TWITCH_CHANNEL_ID;
 
-		for (const type of types) {
+		const subs = [
+			{ type: 'stream.online', condition: { broadcaster_user_id: channelId } },
+			{ type: 'stream.offline', condition: { broadcaster_user_id: channelId } },
+			{ type: 'channel.chat.message', condition: { broadcaster_user_id: channelId, user_id: '648526618' } }
+		];
+
+		for (const sub of subs) {
 			try {
 				const response = await fetch('https://api.twitch.tv/helix/eventsub/subscriptions', {
 					method: 'POST',
 					headers,
 					body: JSON.stringify({
-						type,
+						type: sub.type,
 						version: '1',
-						condition: { broadcaster_user_id: this.env.TWITCH_CHANNEL_ID },
+						condition: sub.condition,
 						transport: { method: 'websocket', session_id: sessionId },
 					}),
 				});
 
 				if (response.status === 401 && !isRetry) {
-					console.warn(`401 for ${type}, fetching new token`);
+					console.warn(`401 for ${sub.type}, fetching new token`);
 					await this.refreshTwitchToken();
 
-					console.log(`trying ${type} again with new token`);
+					console.log(`trying ${sub.type} again with new token`);
 					return await this.subscribe(sessionId, true);
 				}
 
 				if (!response.ok) {
 					const text = await response.text();
-					console.error(`sub failed for ${type}, status: ${response.status}, response: ${text}`);
+					console.error(`sub failed for ${sub.type}, status: ${response.status}, response: ${text}`);
 				} else {
-					console.log(`subscribed to ${type}`);
+					console.log(`subscribed to ${sub.type}`);
 				}
 			} catch (err) {
-				console.error(`something died with ${type}, `, err);
+				console.error(`something died with ${sub.type}, `, err);
 			}
 		}
 	}
@@ -239,11 +252,16 @@ export default {
 		const url = new URL(request.url);
 
 		if (url.pathname === '/api/status') {
-			const [isLiveStr, offlineTimestamp] = await Promise.all([
+			const [isLiveStr, offlineTimestamp, sorryCount] = await Promise.all([
 				env.STREAM_DATA.get('is_live'),
-																	env.STREAM_DATA.get('offline_timestamp'),
+				env.STREAM_DATA.get('offline_timestamp'),
+				env.STREAM_DATA.get('sorry_count')
 			]);
-			return Response.json({ isLive: isLiveStr === 'true', offlineTimestamp });
+			return Response.json({
+				isLive: isLiveStr === 'true',
+				offlineTimestamp,
+				sorryCount: sorryCount || "0"
+			});
 		}
 
 		if (url.pathname === '/api/connect') {

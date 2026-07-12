@@ -1,3 +1,10 @@
+img.emoji {
+	height: 1em;
+	width: 1em;
+	margin: 0 .05em 0 .1em;
+	vertical-align: -0.1em;
+}
+
 body, html {
 	height: 100%;
 }
@@ -7,7 +14,10 @@ body, html {
 	--card-bg: rgba(88, 88, 88, 1);
 	--twitch-color: rgba(100, 65, 165, 1);
 	--yt-color: rgba(178, 7, 29, 1);
+	--maro-color: white;
 	--twitter-color: black;
+	--online-color: grey;
+	--online-border: grey;
 }
 
 * {
@@ -35,21 +45,21 @@ body, html {
 
 .the-main-thing-box-thing {
 	position: fixed;
-	height: 80%;
+	height: 90%;
 	top: 50%;
 	left: 50%;
 	z-index: 2;
 	border: 1px solid var(--container-bg);
 	border-radius: 24px;
-	text-align: center;
 	background: var(--container-bg);
-	width: 80%;
-	padding: 20px;
+	width: 50%;
 	transform: translate(-50%, -50%);
 }
 
 .evil-ass-yearn-timer {
-	position:fixed;
+	display: flex;
+	margin: 2%;
+	position: fixed;
 	height: 20%;
 	width: 80%;
 	top: 70%;
@@ -57,61 +67,134 @@ body, html {
 	z-index: 3;
 	transform: translate(-50%, -50%);
 	background: var(--card-bg);
+	font-size: 8vw;
+	align-items: center;
+	justify-content: center;
+	container-type: inline-size;
+	container-name: dynamic-box;
+	overflow: hidden;
+
 }
 
-.there-has-to-be-a-news-ticker {
+.timer-actual-time {
+	font-size: 16cqi;
+	font-size: clamp(1rem, 16cqi, 8rem);
+}
+
+.timer-label {
+	position: fixed;
+	top: 52%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.socials {
 	display: flex;
+	right: 5%;
+	z-index: 3;
 	position: fixed;
 	height: 5%;
-	top: 0%;
-	left: 0%;
-	z-index: 2;
-	background: var(--container-bg);
-	width: 100%;
+	width: 20%;
+	border-radius: 8px;
 	align-items: center;
 	justify-content: center;
 }
 
 .twitch {
-	position: fixed;
-	height: 7%;
-	width: 15%;
-	top: 7%;
-	left: 3%;
-	z-index: 3;
+	top: 6%;
 	background: var(--twitch-color);
-	border-radius: 8px;
 }
 
 .yt {
-	position: fixed;
-	height: 7%;
-	width: 15%;
-	top: 17%;
-	left: 3%;
-	z-index: 3;
+	top: 12%;
 	background: var(--yt-color);
-	border-radius: 8px;
 }
 
 .twitter {
-	position: fixed;
-	height: 7%;
-	width: 15%;
-	top: 27%;
-	left: 3%;
-	z-index: 3;
+	top: 18%;
 	background: var(--twitter-color);
-	border-radius: 8px;
+}
+
+.maro {
+	top: 25%;
+	background: var(--maro-color);
+}
+
+.divider {
+	border: 0;
+	height: 2px;
+	margin: 18px 0;
+	position: fixed;
+	top: 40%;
+	left: 50%;
+	width: 100%;
+	transform: translate(-50%, -50%);
+	background: -moz-linear-gradient(left, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 10%, rgba(0,0,0,0.65) 50%, rgba(0,0,0,0) 90%, rgba(0,0,0,0) 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(0,0,0,0)), color-stop(10%,rgba(0,0,0,0)), color-stop(50%,rgba(0,0,0,0.65)), color-stop(90%,rgba(0,0,0,0)), color-stop(100%,rgba(0,0,0,0))); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(left, rgba(0,0,0,0) 0%,rgba(0,0,0,0) 10%,rgba(0,0,0,0.65) 50%,rgba(0,0,0,0) 90%,rgba(0,0,0,0) 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(left, rgba(0,0,0,0) 0%,rgba(0,0,0,0) 10%,rgba(0,0,0,0.65) 50%,rgba(0,0,0,0) 90%,rgba(0,0,0,0) 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(left, rgba(0,0,0,0) 0%,rgba(0,0,0,0) 10%,rgba(0,0,0,0.65) 50%,rgba(0,0,0,0) 90%,rgba(0,0,0,0) 100%); /* IE10+ */
+	background: linear-gradient(left, rgba(0,0,0,0) 0%,rgba(0,0,0,0) 10%,rgba(0,0,0,0.65) 50%,rgba(0,0,0,0) 90%,rgba(0,0,0,0) 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#00000000',GradientType=1 ); /* IE6-9 */
+}
+
+.divider:before {
+	display: block;
+	content: "";
+	border: 1px solid black;
+	position: fixed;
+	width: 5%;
+	left: 40%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	z-index: 3;
 }
 
 .icon {
 	clip-path: circle(50%);
 	position: fixed;
+	top: 5%;
 	z-index: 3;
-	left: 20%;
+	left: 50%;
+	transform: translate(-50%, 0%);
+}
+
+#mimi-icon-front {
+transition: opacity 0.2s ease-in-out;
+opacity: 1;
+}
+
+.fade-out {
+	opacity: 0 !important;
 }
 
 .obituary-text {
+	display: flex;
+	border: 2px solid var(--online-border);
+	border-radius: 50px;
+	background: var(--online-color);
 	position: fixed;
+	top: 37%;
+	left: 50%;
+	width: 25%;
+	height: 5%;
+	transform: translate(-50%, -50%);
+	font-size: 10px;
+	align-items: center;
+	justify-content: center;
+	transition: all 0.2s ease-in-out;
+}
+
+.title-card {
+	position: fixed;
+	top: 25%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.oshi-mark {
+	position: fixed;
+	top: 30%;
+	left: 50%;
+	transform: translate(-50%, -50%);
 }
