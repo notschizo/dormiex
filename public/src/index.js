@@ -10,18 +10,18 @@ export async function getOfflineDate() {
 	return offlineTime;
 }
 
-function getTimeStampOffset(date) {
+export function getOfflineTime(offlineDate) {
+	return formatTimeStamp(getTheAmountOfTimeBetweenTheThingAndTheNextThing(offlineDate));
+}
+
+export function getBirthdayCountdown() {
+	return formatTimeStamp(getTheAmountOfTimeBetweenTheThingAndTheNextThing(getBirthDate()));
+}
+
+function getTheAmountOfTimeBetweenTheThingAndTheNextThing(date) {
 	let nowTimeStamp = new Date().getTime();
 	let offset = Math.abs(nowTimeStamp - date.getTime());
 	return offset;
-}
-
-function getOfflineTime(offlineTimeStamp) {
-	return formatMilliseconds(getTimeStampOffset(offlineTimeStamp));
-}
-
-function getBirthdayCountdown() {
-	return formatMilliseconds(getTimeStampOffset(getBirthDate()));
 }
 
 function getBirthDate() {
@@ -43,8 +43,7 @@ function getTimeIntervals(milliseconds) {
 	return [days, hours, minutes, seconds];
 }
 
-// formatMilliseconds
-function formatMilliseconds(milliseconds) {
+function formatTimeStamp(milliseconds) {
 	let formattedTime;
 	let timeIntervals = getTimeIntervals(milliseconds);
 	for (let i = 0; i < timeIntervals.length; i++) {

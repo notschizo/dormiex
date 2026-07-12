@@ -5,18 +5,21 @@
 <h1>oh god it hurts so bad</h1>
 <h6>test</h6>
 <p id="timestampThing"></p>
+<p id="birthdayTimestampThing"></p>
 
 <script type="module">
-import { fetchStreamStatus, getOfflineDate, formatMilliseconds } from './src/index.js';
+import { fetchStreamStatus, getOfflineDate, getOfflineTime, getBirthdayCountdown } from './src/index.js';
 var status = await fetchStreamStatus();
 var offlineDate = await getOfflineDate();
 function render() {
-	var el = document.getElementById("timestampThing");
+	var timer = document.getElementById("timestampThing");
+	var birthdayTimer = document.getElementById("birthdayTimestampThing");
 	if (status.isLive) {
-		el.innerHTML = "wow im living it(??)";
+		timer.innerHTML = "wow im living it(??)";
 	} else {
-		el.innerHTML = offlineDate ? formatMilliseconds(offlineDate) : "";
+		timer.innerHTML = offlineDate ? getOfflineTime(offlineDate) : "";
 	}
+	birthdayTimer.innerHTML = getBirthdayCountdown();
 }
 render();
 setInterval(render, 1000);
