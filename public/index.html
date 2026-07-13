@@ -9,7 +9,7 @@
 <script type="module">
 	import { fetchStreamStatus, getOfflineDate, getOfflineTime, getBirthdayCountdown } from './src/index.js';
 
-	let onlineBool = false;
+	let onlineBool;
 	let status = await fetchStreamStatus();
 	let offlineDate = await getOfflineDate();
 	let toggle = true;
@@ -45,7 +45,9 @@
 		counterArray[0] = offlineDate ? getOfflineTime(offlineDate) : "";
 		counterArray[1] = getBirthdayCountdown();
 		counterArray[2] = status.sorryCount
-
+		if (onlineBool = undefined) {
+			onlineBool = !status.isLive
+		}
 		if (status.isLive && onlineBool == false) {
 			inner = "rgba(76, 245, 39, 0.5)";
 			border = "green";
@@ -120,9 +122,8 @@
 
 	<div class="divider"></div>
 	<div id="timer-label" class="timer-label"><h1>Time since last seen:</h1></div>
-	<div class="evil-ass-yearn-timer"><div id="timer-actual-time"class="timer-actual-time"></div></div>
+	<div class="evil-ass-yearn-timer"><div id="timer-actual-time" class="timer-actual-time"></div></div>
 
-</div>
 </div>
 
 </body>
