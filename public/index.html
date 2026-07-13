@@ -1,15 +1,12 @@
  <!DOCTYPE html>
 <html lang="en">
-<head>
-	<meta charset ="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="style.css" type="text/css">
-	<script src="https://unpkg.com/@twemoji/api@latest/dist/twemoji.min.js" crossorigin="anonymous"></script>
-</head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="style.css" type="text/css">
+<script src="https://unpkg.com/@twemoji/api@latest/dist/twemoji.min.js" crossorigin="anonymous"></script>
 
 <script type="module">
 	import { fetchStreamStatus, getOfflineDate, getOfflineTime, getBirthdayCountdown } from './src/index.js';
 	let status, offlineDate;
-	let onlineBool;
 	async function start() {
 		try {
 			status = await fetchStreamStatus();
@@ -22,7 +19,6 @@
 		}
 	}
 
-	let toggle = true;
 	let counterIndex = 0;
 	let counterArray = ["", "", ""];
 	let counterString = ["<h1>Time since last seen:</h1>", "<h1>Time until birthday:</h1>", "<h1>Times apologized:</h1>"];
@@ -45,56 +41,16 @@
 	}
 
 	function render() {
-		let inner = status.isLive ? "rgba(76, 245, 39, 0.5)" : "rgba(255, 54, 54, 0.5)";
-		let border = status.isLive ? "green" : "red";
-		let icon = status.isLive ? "mimi-icon" : "mimi-icon-offline";
-		let obituaryText = document.getElementById("obituary-text");
 		let timerLabel = document.getElementById("timer-label");
-		let actualTimer = document.getElementById("timer-actual-time")
-		if (onlineBool == undefined) {
-			onlineBool = !status.isLive;
-		}
+		let actualTimer = document.getElementById("timer-actual-time");
 
 		counterArray[0] = status.isLive ? "🐁" : getOfflineTime(offlineDate);
 		counterArray[1] = getBirthdayCountdown();
-		counterArray[2] = status.sorryCount
+		counterArray[2] = status.sorryCount;
 
-		if (status.isLive && onlineBool == false) {
-			inner = "rgba(76, 245, 39, 0.5)";
-			border = "green";
-			icon = "mimi-icon"
-			onlineBool = true;
-		} else if (!status.isLive && onlineBool) {
-			inner = "rgba(255, 54, 54, 0.5)";
-			border = "red";
-			icon = "mimi-icon-offline";
-			onlineBool = false;
-		}
+		timerLabel.innerHTML = counterString[counterIndex];
+		actualTimer.innerHTML = counterArray[counterIndex];
 
-		if (inner != undefined){
-			timerLabel.innerHTML = counterString[counterIndex];
-			actualTimer.innerHTML = counterArray[counterIndex];
-		}
-
-
-		if (border == "red") {
-			obituaryText.innerHTML = "i miss mimi so bad";
-		} else {
-			obituaryText.innerHTML = "mimi live!! mimi time!!";
-		}
-		document.documentElement.style.setProperty("--online-color", inner);
-		document.documentElement.style.setProperty("--online-border", border);
-
-		let frontImage = document.getElementById("mimi-icon-front");
-		let backImage = document.getElementById("mimi-icon-back");
-		let newIcon = "./img/" + icon + ".png";
-		backImage.setAttribute("src", newIcon);
-		frontImage.classList.add("fade-out");
-
-		setTimeout(() => {
-			frontImage.setAttribute("src", newIcon);
-			frontImage.classList.remove("fade-out");
-		}, 300);
 		twemoji.parse(document.body);
 	}
 
@@ -117,40 +73,46 @@
 
 </script>
 
+<head>
+    <meta charset="utf-8">
+    <title>i miss mimi</title>
+    <link rel="stylesheet" type="text/css" href="../public/css/style.css">
+</head>
+
 <body>
-
-<div class="bg-image"></div>
-<div class="the-main-thing-box-thing">
-
-	<div class="icon" style="position: relative; width: 150px; height: 150px;">
-		<img id="mimi-icon-back" src="./img/mimi-icon-offline.png" height="150" width="150" style="position: absolute;">
-
-		<img id="mimi-icon-front" src="./img/mimi-icon-offline.png" height="150" width="150" style="position: absolute; z-index: 2;">
-	</div>
-	<h1 class="title-card">Nemimi Yane</h1>
-	<h1 class="oshi-mark">🐁🪤</h1>
-	<div id="obituary-text" class="obituary-text"></div>
-
-	<a href="https://twitch.tv/NemimiYane" target="_blank">
-		<div class="socials twitch"><h1>twitch</h1></div>
-	</a>
-	<a href="https://youtube.com/NemimiYane" target="_blank">
-		<div class="socials yt"><h1>youtube</h1></div>
-	</a>
-	<a href="https://x.com/NemimiYane" target="_blank">
-		<div class="socials twitter"><h1>twitter</h1></div>
-	</a>
-	<a href="https://marshmallow-qa.com/nemimi" target="_blank">
-		<div class="socials maro"><h1>maro</h1></div>
-	</a>
+    <div class="the-main-thing-box-thing">
+        <div class="header">
+            <h1>i miss mimi</h1>
+        </div>
+        <div>
+            <img id="mimi" class="mainimg" src="./img/dormies-no-mimi.png" alt="dormies no mimi">
+            <div style="margin-top: 2rem">
 
 
-	<div class="divider"></div>
-	<div id="timer-label" class="timer-label"><h1>Time since last seen:</h1></div>
-	<div class="evil-ass-yearn-timer"><div id="timer-actual-time" class="timer-actual-time"></div></div>
-	<button id="timer-button-left" class="button timer-button-left">&lt;</button>
-	<button id="timer-button-right" class="button timer-button-right">&gt;</button>
+	    <div class="divider"></div>
+	    <div id="timer-label" class="timer-label"><h1>Time since last seen:</h1></div>
+	    <div class="evil-ass-yearn-timer"><div class="timer-actual-time">timer</div></div>
+	    <button class="button timer-button-left">&lt;</button>
+	    <button class="button timer-button-right">&gt;</button>
 
+        <footer>
+            <div id="links">
+                <a href="https://twitter.com/NemimiYane" target="_blank"><img src="assets/images/x-logo.png" class="linkimg" alt="X" /></a>
+                <a href="https://www.youtube.com/@NemimiYane" target="_blank"><img src="assets/images/youtube-logo.png" class="linkimg" alt="YouTube" /></a>
+                <a href="https://www.twitch.tv/nemimiyane" target="_blank"><img src="assets/images/twitch-logo.png" class="linkimg" alt="Twitch" /></a>
+            </div>
+            <br>
+            <span id="emote-credits">Art by: @InkPhantoom</span>
+            <br>
+            <br>
+            <span id="footer-text">Made with 🩵 by Dormies</span>
+            <br>
+            <small>Not affiliated with Nemimi Yane</small>
+            <br>
+            <small>Inspired by <a href="https://imissnimi.com">imissnimi.com</a></small>
+        </footer>
+
+</div>
 </div>
 
 </body>
