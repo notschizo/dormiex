@@ -34,7 +34,7 @@ body, html {
   -webkit-text-stroke: 7px #fff;
   paint-order: stroke fill;
 
-  width: 500px;
+  width: 17rem;
   height: 100px;
 
   border-radius: 8px;
@@ -67,7 +67,7 @@ body, html {
 }
 
 .timer-label {
-  line-height: 20px;
+  line-height: 15px;
 }
 
 .evil-ass-yearn-timer {
@@ -103,8 +103,7 @@ hr {
 }
 
 footer {
-  font-size: 25%;
+  font-size: 10px;
 
   margin-top: 2rem;
-  bottom: 0rem;
 }
