@@ -14,7 +14,7 @@
 		try {
 			status = await fetchStreamStatus();
 			console.log(status);
-			let offlineDate = await getOfflineDate();
+			offlineDate = await getOfflineDate();
 			console.log(offlineDate);
 			render();
 		} catch (err) {
