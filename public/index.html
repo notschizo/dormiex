@@ -45,7 +45,7 @@
 		counterArray[0] = offlineDate ? getOfflineTime(offlineDate) : "";
 		counterArray[1] = getBirthdayCountdown();
 		counterArray[2] = status.sorryCount
-		if (onlineBool = undefined) {
+		if (onlineBool == undefined) {
 			onlineBool = !status.isLive
 		}
 		if (status.isLive && onlineBool == false) {
@@ -60,8 +60,10 @@
 			onlineBool = false;
 		}
 
-		timerLabel.innerHTML = counterString[counterIndex];
-		actualTimer.innerHTML = counterArray[counterIndex];
+		if (inner != undefined){
+			timerLabel.innerHTML = counterString[counterIndex];
+			actualTimer.innerHTML = counterArray[counterIndex];
+		}
 
 
 		if (border == "red") {
