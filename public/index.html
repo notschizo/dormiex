@@ -51,7 +51,9 @@
 		let obituaryText = document.getElementById("obituary-text");
 		let timerLabel = document.getElementById("timer-label");
 		let actualTimer = document.getElementById("timer-actual-time")
-
+		if (onlineBool == undefined) {
+			onlineBool = !status.isLive;
+		}
 
 		counterArray[0] = offlineDate ? getOfflineTime(offlineDate) : "";
 		counterArray[1] = getBirthdayCountdown();
@@ -95,6 +97,13 @@
 		}, 300);
 		twemoji.parse(document.body);
 	}
+
+	setInterval(render, 1000);
+
+	setInterval(async function() {
+		status = await fetchStreamStatus();
+		offlineDate = await getOfflineDate();
+	}, 30000);
 
 	document.addEventListener("DOMContentLoaded", function() {
 		twemoji.parse(document.body);
