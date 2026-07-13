@@ -1,41 +1,128 @@
-<!DOCTYPE html>
-<html>
-<body>
-
-<h1>oh god it hurts so bad</h1>
-<h6>test</h6>
-<p id="timestampThing"></p>
-<p id="birthdayTimestampThing"></p>
-<p id="sorryCount"></p>
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset ="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="style.css" type="text/css">
+	<script src="https://unpkg.com/@twemoji/api@latest/dist/twemoji.min.js" crossorigin="anonymous"></script>
+</head>
 
 <script type="module">
-import { fetchStreamStatus, getOfflineDate, getOfflineTime, getBirthdayCountdown } from './src/index.js';
+	import { fetchStreamStatus, getOfflineDate, getOfflineTime, getBirthdayCountdown } from './src/index.js';
 
-var status = await fetchStreamStatus();
-var offlineDate = await getOfflineDate();
+	let onlineBool = false;
+	let status = await fetchStreamStatus();
+	let offlineDate = await getOfflineDate();
+	let toggle = true;
+	let counterIndex = 0;
+	let counterArray = ["", "", ""];
+	let counterString = ["<h1>Time since last seen:</h1>", "<h1>Time until birthday:</h1>", "<h1>Times apologized:</h1>"];
 
-function render() {
-	var timer = document.getElementById("timestampThing");
-	var birthdayTimer = document.getElementById("birthdayTimestampThing");
-	var sorryCounter = document.getElementById("sorryCount");
-
-	if (status.isLive) {
-		timer.innerHTML = "we're probably live i hope";
-	} else {
-		timer.innerHTML = offlineDate ? getOfflineTime(offlineDate) : "";
-	}
-	birthdayTimer.innerHTML = getBirthdayCountdown();
-	if (sorryCounter && status.sorryCount) {
-        sorryCounter.innerHTML = `nemimi has apologized ${status.sorryCount} times!`;
-	}
+	function changeCounterType(direction = "right") {
+    if (direction == "right") {
+        if (counterIndex < 2) {
+            counterIndex += 1;
+        } else {
+            counterIndex = 0;
+        }
+    } else {
+        if (counterIndex > 0) {
+            counterIndex -= 1;
+        } else {
+            counterIndex = 2;
+        }
+    }
+    render();
 }
-render();
-setInterval(render, 1000);
-setInterval(async function() {
-	status = await fetchStreamStatus();
-	offlineDate = await getOfflineDate();
-}, 30000);
+
+	function render() {
+		let inner;
+		let border;
+		let icon;
+		let obituaryText = document.getElementById("obituary-text");
+		let timerLabel = document.getElementById("timer-label");
+		let actualTimer = document.getElementById("timer-actual-time")
+
+		counterArray[0] = offlineDate ? getOfflineTime(offlineDate) : "";
+		counterArray[1] = getBirthdayCountdown();
+		counterArray[2] = status.sorryCount
+
+		if (status.isLive && onlineBool == false) {
+			inner = "rgba(76, 245, 39, 0.5)";
+			border = "green";
+			icon = "mimi-icon"
+			onlineBool = true;
+		} else if (!status.isLive && onlineBool) {
+			inner = "rgba(255, 54, 54, 0.5)";
+			border = "red";
+			icon = "mimi-icon-offline";
+			onlineBool = false;
+
+		timerLabel.innerHTML = counterString[counterIndex];
+		actualTimer.innerHTML = counterArray[counterIndex];
+
+
+		if (border == "red") {
+			obituaryText.innerHTML = "i miss mimi so bad";
+		} else {
+			obituaryText.innerHTML = "mimi live!! mimi time!!";
+		}
+		document.documentElement.style.setProperty("--online-color", inner);
+		document.documentElement.style.setProperty("--online-border", border);
+
+		let frontImage = document.getElementById("mimi-icon-front");
+		let backImage = document.getElementById("mimi-icon-back");
+		let newIcon = "./img/" + icon + ".png";
+		backImage.setAttribute("src", newIcon);
+		frontImage.classList.add("fade-out");
+
+		setTimeout(() => {
+			frontImage.setAttribute("src", newIcon);
+			frontImage.classList.remove("fade-out");
+		}, 300);
+		twemoji.parse(document.body);
+	}
+
+	document.addEventListener("DOMContentLoaded", function() {
+	twemoji.parse(document.body);
+	render();
+	});
+
 </script>
+
+<body>
+
+<div class="bg-image"></div>
+<div class="the-main-thing-box-thing">
+
+	<div class="icon" style="position: relative; width: 150px; height: 150px;">
+		<img id="mimi-icon-back" src="./img/mimi-icon-offline.png" height="150" width="150" style="position: absolute;">
+
+		<img id="mimi-icon-front" src="./img/mimi-icon-offline.png" height="150" width="150" style="position: absolute; z-index: 2;">
+	</div>
+	<h1 class="title-card">Nemimi Yane</h1>
+	<h1 class="oshi-mark">🐁🪤</h1>
+	<div id="obituary-text" class="obituary-text"></div>
+
+	<a href="https://twitch.tv/NemimiYane" target="_blank">
+		<div class="socials twitch"><h1>twitch</h1></div>
+	</a>
+	<a href="https://youtube.com/NemimiYane" target="_blank">
+		<div class="socials yt"><h1>youtube</h1></div>
+	</a>
+	<a href="https://x.com/NemimiYane" target="_blank">
+		<div class="socials twitter"><h1>twitter</h1></div>
+	</a>
+	<a href="https://marshmallow-qa.com/nemimi" target="_blank">
+		<div class="socials maro"><h1>maro</h1></div>
+	</a>
+
+
+	<div class="divider"></div>
+	<div id="timer-label" class="timer-label"><h1>Time since last seen:</h1></div>
+	<div class="evil-ass-yearn-timer"><div id="timer-actual-time"class="timer-actual-time"></div></div>
+
+</div>
+</div>
 
 </body>
 </html>

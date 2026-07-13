@@ -6,8 +6,28 @@
 
 <script>
 	let toggle = true;
+	let counterIndex = 0;
+	let counterArray = [];
+	let counterString = ["<h1>Time since last seen:</h1>", "<h1>Time until birthday:</h1>", "<h1>Times apologized:</h1>"];
 
-	function changeToggle() {
+	function changeCounterType(direction = "right") {
+    if (direction == "right") {
+        if (counterIndex < 2) {
+            counterIndex += 1;
+        } else {
+            counterIndex = 0;
+        }
+    } else {
+        if (counterIndex > 0) {
+            counterIndex -= 1;
+        } else {
+            counterIndex = 2;
+        }
+    }
+    render();
+}
+
+	function toggleOnlineStatus() {
 		let inner;
 		let border;
 		let icon;
@@ -26,6 +46,16 @@
 	}
 
 	function render(inner = "rgba(255, 54, 54, 0.5)", border = "red", icon = "mimi-icon-offline") {
+		let obituaryText = document.getElementById("obituary-text");
+		let timerLabel = document.getElementById("timer-label");
+
+		timerLabel.innerHTML = counterString[counterIndex];
+
+		if (border == "red") {
+			obituaryText.innerHTML = "i miss mimi so bad";
+		} else {
+			obituaryText.innerHTML = "mimi live!! mimi time!!";
+		}
 		document.documentElement.style.setProperty("--online-color", inner);
 		document.documentElement.style.setProperty("--online-border", border);
 
@@ -60,7 +90,7 @@
 	</div>
 	<h1 class="title-card">Nemimi Yane</h1>
 	<h1 class="oshi-mark">🐁🪤</h1>
-	<button id="obituary-text" class="obituary-text" onclick="changeToggle()"></button>
+	<button id="obituary-text" class="obituary-text" onclick="toggleOnlineStatus()"></button>
 
 	<a href="https://twitch.tv/NemimiYane" target="_blank">
 		<div class="socials twitch"><h1>twitch</h1></div>
@@ -77,7 +107,7 @@
 
 
 	<div class="divider"></div>
-	<div class="timer-label"><h1>Time since last seen:</h1></div>
+	<div id="timer-label" class="timer-label"><h1>Time since last seen:</h1></div>
 	<div class="evil-ass-yearn-timer"><div class="timer-actual-time">timer</div></div>
 
 </div>
