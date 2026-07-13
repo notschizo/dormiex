@@ -35,19 +35,18 @@
 }
 
 	function render() {
-		let inner;
-		let border;
-		let icon;
+		let inner = isLive ? "rgba(76, 245, 39, 0.5)" : "rgba(255, 54, 54, 0.5)";
+		let border = isLive ? "green" : "red";
+		let icon = isLive ? "mimi-icon" : "mimi-icon-offline";
 		let obituaryText = document.getElementById("obituary-text");
 		let timerLabel = document.getElementById("timer-label");
 		let actualTimer = document.getElementById("timer-actual-time")
 
+
 		counterArray[0] = offlineDate ? getOfflineTime(offlineDate) : "";
 		counterArray[1] = getBirthdayCountdown();
 		counterArray[2] = status.sorryCount
-		if (onlineBool == undefined) {
-			onlineBool = !status.isLive
-		}
+
 		if (status.isLive && onlineBool == false) {
 			inner = "rgba(76, 245, 39, 0.5)";
 			border = "green";
