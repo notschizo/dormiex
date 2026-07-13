@@ -1,0 +1,113 @@
+ <!DOCTYPE html>
+<html lang="en">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="style.css" type="text/css">
+
+<script type="module">
+	import { fetchStreamStatus, getOfflineDate, getOfflineTime, getBirthdayCountdown } from './src/index.js';
+	let status, offlineDate;
+	async function start() {
+		try {
+			status = await fetchStreamStatus();
+			console.log(status);
+			offlineDate = await getOfflineDate();
+			console.log(offlineDate);
+			render();
+		} catch (err) {
+			console.error("oops!");
+		}
+	}
+
+	let counterIndex = 0;
+	let counterArray = ["", "", ""];
+	let counterString = ["<h1>Time since last seen:</h1>", "<h1>Time until birthday:</h1>", "<h1>Times apologized:</h1>"];
+
+	function changeCounterType(direction = "right") {
+    if (direction == "right") {
+        if (counterIndex < 2) {
+            counterIndex += 1;
+        } else {
+            counterIndex = 0;
+        }
+    } else {
+        if (counterIndex > 0) {
+            counterIndex -= 1;
+        } else {
+            counterIndex = 2;
+        }
+    }
+    render();
+	}
+
+	function render() {
+		let timerLabel = document.getElementById("timer-label");
+		let actualTimer = document.getElementById("timer-actual-time");
+
+		counterArray[0] = status.isLive ? "🐁" : getOfflineTime(offlineDate);
+		counterArray[1] = getBirthdayCountdown();
+		counterArray[2] = status.sorryCount;
+
+		timerLabel.innerHTML = counterString[counterIndex];
+		actualTimer.innerHTML = counterArray[counterIndex];
+	}
+
+	setInterval(render, 1000);
+
+	setInterval(async function() {
+		status = await fetchStreamStatus();
+		offlineDate = await getOfflineDate();
+	}, 10000);
+
+	document.addEventListener("DOMContentLoaded", function() {
+		start();
+
+		document.getElementById("timer-button-left").addEventListener("click", () => changeCounterType("left"));
+		document.getElementById("timer-button-right").addEventListener("click", () => changeCounterType("right"));
+	});
+
+
+
+</script>
+
+<head>
+    <meta charset="utf-8">
+    <title>i miss mimi</title>
+    <link rel="stylesheet" type="text/css" href="../public/css/style.css">
+</head>
+
+<body>
+    <div class="the-main-thing-box-thing">
+        <div class="header">
+            <h1>i miss mimi</h1>
+        </div>
+        <div>
+            <img id="mimi" class="mainimg" src="./img/dormies-no-mimi.png" alt="dormies no mimi">
+
+	    <div class="divider"></div>
+	    <div id="timer-label" class="timer-label"><h1>Time since last seen:</h1></div>
+	    <div class="evil-ass-yearn-timer"><div id="timer-actual-time" class="timer-actual-time">timer</div></div>
+	    <button id="timer-button-left" class="button timer-button-left">&lt;</button>
+	    <button id="timer-button-right" class="button timer-button-right">&gt;</button>
+
+        <footer>
+            <div id="links">
+                <a href="https://twitter.com/NemimiYane" target="_blank"><img src="assets/images/x-logo.png" class="linkimg" alt="X" /></a>
+                <a href="https://www.youtube.com/@NemimiYane" target="_blank"><img src="assets/images/youtube-logo.png" class="linkimg" alt="YouTube" /></a>
+                <a href="https://www.twitch.tv/nemimiyane" target="_blank"><img src="assets/images/twitch-logo.png" class="linkimg" alt="Twitch" /></a>
+            </div>
+            <br>
+            <span id="emote-credits">Art by: @InkPhantoom</span>
+            <br>
+            <br>
+            <span id="footer-text">Made with 🩵 by Dormies</span>
+            <br>
+            <small>Not affiliated with Nemimi Yane</small>
+            <br>
+            <small>Inspired by <a href="https://imissnimi.com">imissnimi.com</a></small>
+        </footer>
+
+</div>
+</div>
+
+</body>
+</html>
