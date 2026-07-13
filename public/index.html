@@ -2,7 +2,6 @@
 <html lang="en">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="style.css" type="text/css">
-<script src="https://unpkg.com/@twemoji/api@latest/dist/twemoji.min.js" crossorigin="anonymous"></script>
 
 <script type="module">
 	import { fetchStreamStatus, getOfflineDate, getOfflineTime, getBirthdayCountdown } from './src/index.js';
@@ -50,8 +49,6 @@
 
 		timerLabel.innerHTML = counterString[counterIndex];
 		actualTimer.innerHTML = counterArray[counterIndex];
-
-		twemoji.parse(document.body);
 	}
 
 	setInterval(render, 1000);
@@ -62,7 +59,6 @@
 	}, 10000);
 
 	document.addEventListener("DOMContentLoaded", function() {
-		twemoji.parse(document.body);
 		start();
 
 		document.getElementById("timer-button-left").addEventListener("click", () => changeCounterType("left"));
@@ -91,9 +87,9 @@
 
 	    <div class="divider"></div>
 	    <div id="timer-label" class="timer-label"><h1>Time since last seen:</h1></div>
-	    <div class="evil-ass-yearn-timer"><div class="timer-actual-time">timer</div></div>
-	    <button class="button timer-button-left">&lt;</button>
-	    <button class="button timer-button-right">&gt;</button>
+	    <div class="evil-ass-yearn-timer"><div id="timer-actual-time" class="timer-actual-time">timer</div></div>
+	    <button id="timer-button-left" class="button timer-button-left">&lt;</button>
+	    <button id="timer-button-right" class="button timer-button-right">&gt;</button>
 
         <footer>
             <div id="links">
