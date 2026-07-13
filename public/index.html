@@ -45,9 +45,9 @@
 }
 
 	function render() {
-		let inner = isLive ? "rgba(76, 245, 39, 0.5)" : "rgba(255, 54, 54, 0.5)";
-		let border = isLive ? "green" : "red";
-		let icon = isLive ? "mimi-icon" : "mimi-icon-offline";
+		let inner = status.isLive ? "rgba(76, 245, 39, 0.5)" : "rgba(255, 54, 54, 0.5)";
+		let border = status.isLive ? "green" : "red";
+		let icon = status.isLive ? "mimi-icon" : "mimi-icon-offline";
 		let obituaryText = document.getElementById("obituary-text");
 		let timerLabel = document.getElementById("timer-label");
 		let actualTimer = document.getElementById("timer-actual-time")
