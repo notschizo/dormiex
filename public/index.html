@@ -42,7 +42,7 @@
         }
     }
     render();
-}
+	}
 
 	function render() {
 		let inner = status.isLive ? "rgba(76, 245, 39, 0.5)" : "rgba(255, 54, 54, 0.5)";
@@ -55,7 +55,7 @@
 			onlineBool = !status.isLive;
 		}
 
-		counterArray[0] = offlineDate ? getOfflineTime(offlineDate) : "";
+		counterArray[0] = status.isLive ? "🐁" : getOfflineTime(offlineDate);
 		counterArray[1] = getBirthdayCountdown();
 		counterArray[2] = status.sorryCount
 
@@ -103,12 +103,17 @@
 	setInterval(async function() {
 		status = await fetchStreamStatus();
 		offlineDate = await getOfflineDate();
-	}, 30000);
+	}, 10000);
 
 	document.addEventListener("DOMContentLoaded", function() {
 		twemoji.parse(document.body);
 		start();
+
+		document.getElementById("timer-button-left").addEventListener("click", () => changeCounterType("left"));
+		document.getElementById("timer-button-right").addEventListener("click", () => changeCounterType("right"));
 	});
+
+
 
 </script>
 
@@ -143,6 +148,8 @@
 	<div class="divider"></div>
 	<div id="timer-label" class="timer-label"><h1>Time since last seen:</h1></div>
 	<div class="evil-ass-yearn-timer"><div id="timer-actual-time" class="timer-actual-time"></div></div>
+	<button id="timer-button-left" class="button timer-button-left">&lt;</button>
+	<button id="timer-button-right" class="button timer-button-right">&gt;</button>
 
 </div>
 
