@@ -8,10 +8,20 @@
 
 <script type="module">
 	import { fetchStreamStatus, getOfflineDate, getOfflineTime, getBirthdayCountdown } from './src/index.js';
-
+	let status, offlineDate;
 	let onlineBool;
-	let status = await fetchStreamStatus();
-	let offlineDate = await getOfflineDate();
+	async function start() {
+		try {
+			status = await fetchStreamStatus();
+			console.log(status);
+			let offlineDate = await getOfflineDate();
+			console.log(offlineDate);
+			render();
+		} catch (err) {
+			console.error("oops!");
+		}
+	}
+
 	let toggle = true;
 	let counterIndex = 0;
 	let counterArray = ["", "", ""];
@@ -87,8 +97,8 @@
 	}
 
 	document.addEventListener("DOMContentLoaded", function() {
-	twemoji.parse(document.body);
-	render();
+		twemoji.parse(document.body);
+		start();
 	});
 
 </script>
