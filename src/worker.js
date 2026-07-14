@@ -1,5 +1,5 @@
 const EVENTSUB_WS_URL = 'wss://eventsub.wss.twitch.tv/ws?keepalive_timeout_seconds=30';
-const ALARM_INTERVAL_MS = 10 * 60 * 1000;
+const ALARM_INTERVAL_MS = 30 * 60 * 1000;
 
 export class TwitchEventSub {
 	constructor(state, env) {
@@ -116,6 +116,7 @@ export class TwitchEventSub {
 	async syncInitialState() {
 		console.log('getting current state');
 		try {
+			await this.getNextStream();
 			const currentToken = await this.getAccessToken();
 			const response = await fetch(`https://api.twitch.tv/helix/streams?user_id=${this.env.TWITCH_CHANNEL_ID}`, {
 				method: 'GET',
@@ -241,10 +242,44 @@ export class TwitchEventSub {
 	async alarm() {
 		console.log('checking connection(alarm)');
 		await this.ensureConnected();
+		await this.getNextStream();
 		if (this.ws && this.ws.readyState <= 1) {
 			await this.state.storage.setAlarm(Date.now() + ALARM_INTERVAL_MS);
 		}
 	}
+
+	async getNextStream() {
+		if (!this.env.YOUTUBE_API_KEY || !this.env.YOUTUBE_CHANNEL_ID) return;
+
+		try {
+			const searchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=${this.env.YOUTUBE_CHANNEL_ID}&type=video&eventType=upcoming&key=${this.env.YOUTUBE_API_KEY}`;
+			const searchResponse = await fetch(searchUrl);
+			const searchData = await searchResponse.json();
+
+			if (searchData.items && searchData.items.length > 0) {
+				const streamIds = searchData.items.map(item => item.id.videoId).join(',');
+
+				const detailResponse = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=liveStreamingDetails&id=${streamIds}&key=${this.env.YOUTUBE_API_KEY}`);
+				const detailData = await detailResponse.json();
+
+				const upcomingStreams = detailData.items
+					.filter(item => item.liveStreamingDetails?.scheduledStartTime)
+					.sort((a, b) => new Date(a.liveStreamingDetails.scheduledStartTime) - new Date(b.liveStreamingDetails.scheduledStartTime));
+
+				if (upcomingStreams.length > 0) {
+					const earliest = upcomingStreams[0];
+					const unixTimestamp = Math.floor(new Date(earliest.liveStreamingDetails.scheduledStartTime).getTime() / 1000);
+					await this.env.STREAM_DATA.put('next_stream', unixTimestamp.toString());
+					console.log(`got stream time: ${earliest.liveStreamingDetails.scheduledStartTime}`);
+				}
+			} else {
+				await this.env.STREAM_DATA.put('next_stream', '0');
+			}
+		} catch (err) {
+			console.error('cant get next stream:', err);
+		}
+	}
+
 }
 
 export default {
@@ -252,15 +287,17 @@ export default {
 		const url = new URL(request.url);
 
 		if (url.pathname === '/api/status') {
-			const [isLiveStr, offlineTimestamp, sorryCount] = await Promise.all([
+			const [isLiveStr, offlineTimestamp, sorryCount, nextStream] = await Promise.all([
 				env.STREAM_DATA.get('is_live'),
 				env.STREAM_DATA.get('offline_timestamp'),
-				env.STREAM_DATA.get('sorry_count')
+				env.STREAM_DATA.get('sorry_count'),
+				env.STREAM_DATA.get('next_stream')
 			]);
 			return Response.json({
 				isLive: isLiveStr === 'true',
 				offlineTimestamp,
-				sorryCount: sorryCount || "0"
+				sorryCount: sorryCount || "0",
+				nextStream
 			}, {
 					headers: {
 						'Cache-Control': 'public, max-age=25',
@@ -285,3 +322,5 @@ export default {
 		ctx.waitUntil(stub.fetch(new Request('https://internal/connect')));
 	},
 };
+
+
