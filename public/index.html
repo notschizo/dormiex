@@ -7,7 +7,7 @@
 
 <script type="module">
 	import { fetchStreamStatus, getDate, getOfflineTime, getBirthdayCountdown, getNextStreamTime } from './src/index.js';
-	let status, offlineDate;
+	let status, offlineDate, streamDate;
 	async function start() {
 		try {
 			status = await fetchStreamStatus();
