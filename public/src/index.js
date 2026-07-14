@@ -54,7 +54,7 @@ export function getBirthdayCountdown() {
 	let thisBirthday = getBirthDate()
 	let timeToBirthday = thisBirthday - currentTimeStamp
 
-	if (timeToBirthday < 86400000 && timeToBirthday > 0) {
+	if (timeToBirthday > -86400000 && timeToBirthday < 0) {
 		return "🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉"
 	} else {
 		let actualBirthday = checkPassedBirthday(thisBirthday)
