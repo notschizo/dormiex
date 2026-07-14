@@ -56,6 +56,7 @@ body, html {
 }
 
 .the-main-thing-box-thing {
+  scrollbar-width: none;
   background-color: #c8d5fd;
   color: #7b92e8;
     
@@ -80,7 +81,7 @@ body, html {
 }
 
 .timer-label {
-  line-height: 15px;
+  line-height: 8px;
 }
 
 .evil-ass-yearn-timer {
