@@ -16,11 +16,10 @@ body, html {
   font-family: "Quicksand", serif;
   font-size: 3vmin;
   text-align: center;
-}
-
-.top-bar {
   padding-top: env(safe-area-inset-top);
 }
+
+
 
 .header {
   background-color: #e6c3cd;
