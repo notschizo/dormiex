@@ -43,6 +43,20 @@ jobs:
                 crons = ["*/5 * * * *"]
                 [vars]
                 TWITCH_CHANNEL_ID = "1223232545"
+                [observability]
+                enabled = false
+                head_sampling_rate = 1
+
+                [observability.logs]
+                enabled = true
+                head_sampling_rate = 1
+                persist = true
+                invocation_logs = true
+
+                [observability.traces]
+                enabled = false
+                persist = true
+                head_sampling_rate = 1
                 EOF
             - name: Deploy with Wrangler
               uses: cloudflare/wrangler-action@v4
