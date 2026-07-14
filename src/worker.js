@@ -261,7 +261,12 @@ export default {
 				isLive: isLiveStr === 'true',
 				offlineTimestamp,
 				sorryCount: sorryCount || "0"
-			});
+			}, {
+					headers: {
+						'Cache-Control': 'public, max-age=25',
+						'Access-Control-Allow-Origin': '*'
+					}
+				});
 		}
 
 		if (url.pathname === '/api/connect') {

@@ -35,10 +35,8 @@ export async function fetchStreamStatus() {
 	return response.json();
 }
 
-export async function getOfflineDate() {
-	var status = await fetchStreamStatus();
-	if (!status.offlineTimestamp) return null;
-	let offlineTime = new Date(status.offlineTimestamp * 1000);
+export async function getOfflineDate(offlineTimestamp) {
+	let offlineTime = new Date(offlineTimestamp * 1000);
 	return offlineTime;
 }
 
