@@ -57,7 +57,7 @@
 	setInterval(async function() {
 		status = await fetchStreamStatus();
 		offlineDate = await getOfflineDate();
-	}, 10000);
+	}, 30000);
 
 	document.addEventListener("DOMContentLoaded", function() {
 		start();
