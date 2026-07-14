@@ -9,9 +9,8 @@ body, html {
   background-image: url('./img/mimi.jpg');
   background-size: cover;
   background-position: center;
-  background-attachment: fixed;
   background-repeat: no-repeat;
-  min-height: 100vh;
+  min-height: 100dvh;
 
   font-family: "Quicksand", serif;
   font-size: 3vmin;
@@ -67,7 +66,6 @@ body, html {
   box-sizing: border-box;
   padding: 30px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-
 }
 
 .timer-label {
