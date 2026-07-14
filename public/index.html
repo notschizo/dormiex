@@ -48,7 +48,8 @@
 		let actualTimer = document.getElementById("timer-actual-time");
 
 		counterArray[0] = status.isLive ? "🐁" : getOfflineTime(offlineDate);
-		counterArray[1] = status.isLive ? "🐁" : getNextStreamTime(streamDate);
+		counterArray[1] = status.isLive ? "🐁"
+			: (status.nextStream ? getNextStreamTime(streamDate) : "where mimi???????????");
 		counterArray[2] = getBirthdayCountdown();
 		counterArray[3] = status.sorryCount;
 
