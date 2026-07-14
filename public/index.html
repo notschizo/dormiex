@@ -6,14 +6,16 @@
 <html prefix="og: https://ogp.me/ns#">
 
 <script type="module">
-	import { fetchStreamStatus, getOfflineDate, getOfflineTime, getBirthdayCountdown } from './src/index.js';
+	import { fetchStreamStatus, getDate, getOfflineTime, getBirthdayCountdown, getNextStreamTime } from './src/index.js';
 	let status, offlineDate;
 	async function start() {
 		try {
 			status = await fetchStreamStatus();
 			console.log(status);
-			offlineDate = await getOfflineDate(status.offlineTimestamp);
+			offlineDate = await getDate(status.offlineTimestamp);
+			streamDate = await getDate(status.nextStream);
 			console.log(offlineDate);
+			console.log(streamDate);
 			render();
 		} catch (err) {
 			console.error("oops!");
@@ -21,12 +23,12 @@
 	}
 
 	let counterIndex = 0;
-	let counterArray = ["", "", ""];
-	let counterString = ["<h1>Time since last seen:</h1>", "<h1>Time until birthday:</h1>", "<h1>Times apologized:</h1>"];
+	let counterArray = ["", "", "",""];
+	let counterString = ["<h1>Time since last seen:</h1>","<h1>Time until next stream:</h1>", "<h1>Time until birthday:</h1>", "<h1>Times apologized:</h1>"];
 
 	function changeCounterType(direction = "right") {
     if (direction == "right") {
-        if (counterIndex < 2) {
+        if (counterIndex < 3) {
             counterIndex += 1;
         } else {
             counterIndex = 0;
@@ -35,7 +37,7 @@
         if (counterIndex > 0) {
             counterIndex -= 1;
         } else {
-            counterIndex = 2;
+            counterIndex = 3;
         }
     }
     render();
@@ -46,8 +48,9 @@
 		let actualTimer = document.getElementById("timer-actual-time");
 
 		counterArray[0] = status.isLive ? "🐁" : getOfflineTime(offlineDate);
-		counterArray[1] = getBirthdayCountdown();
-		counterArray[2] = status.sorryCount;
+		counterArray[1] = status.isLive ? "🐁" : getNextStreamTime(streamDate);
+		counterArray[2] = getBirthdayCountdown();
+		counterArray[3] = status.sorryCount;
 
 		timerLabel.innerHTML = counterString[counterIndex];
 		actualTimer.innerHTML = counterArray[counterIndex];
@@ -57,7 +60,8 @@
 
 	setInterval(async function() {
 		status = await fetchStreamStatus();
-		offlineDate = await getOfflineDate(status.offlineTimestamp);
+		offlineDate = await getDate(status.offlineTimestamp);
+		streamDate = await getDate(status.nextStream);
 	}, 30000);
 
 	document.addEventListener("DOMContentLoaded", function() {

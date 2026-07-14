@@ -35,7 +35,7 @@ export async function fetchStreamStatus() {
 	return response.json();
 }
 
-export async function getOfflineDate(offlineTimestamp) {
+export async function getDate(offlineTimestamp) {
 	let offlineTime = new Date(offlineTimestamp * 1000);
 	return offlineTime;
 }
@@ -43,6 +43,11 @@ export async function getOfflineDate(offlineTimestamp) {
 export function getOfflineTime(offlineDate) {
 	return formatTimeStamp(getTheAmountOfTimeBetweenTheThingAndTheNextThing(offlineDate));
 }
+
+export function getNextStreamTime(streamDate) {
+	return formatTimeStamp(getActualTimeDifference(streamDate));
+}
+
 
 export function getBirthdayCountdown() {
 	let currentTimeStamp = new Date();
@@ -56,6 +61,12 @@ export function getBirthdayCountdown() {
 		return formatTimeStamp(getTheAmountOfTimeBetweenTheThingAndTheNextThing(actualBirthday));
 	}
 
+}
+
+function getActualTimeDifference(date) {
+	let nowTimeStamp = new Date().getTime();
+	let offset = date.getTime() - nowTimeStamp;
+	return offset;
 }
 
 function getTheAmountOfTimeBetweenTheThingAndTheNextThing(date) {
