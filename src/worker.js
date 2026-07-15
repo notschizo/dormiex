@@ -299,11 +299,11 @@ export default {
 				sorryCount: sorryCount || "0",
 				nextStream
 			}, {
-					headers: {
-						'Cache-Control': 'public, max-age=25',
-						'Access-Control-Allow-Origin': '*'
-					}
-				});
+				headers: {
+					'Cache-Control': 'no-store, max-age=0, must-revalidate',
+					'Access-Control-Allow-Origin': '*'
+				}
+			});
 		}
 
 		if (url.pathname === '/api/connect') {
