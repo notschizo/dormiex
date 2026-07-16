@@ -63,7 +63,7 @@ export function getBirthdayCountdown() {
 
 }
 
-function getActualTimeDifference(date) {
+export function getActualTimeDifference(date) {
 	let nowTimeStamp = new Date().getTime();
 	let offset = date.getTime() - nowTimeStamp;
 	return offset;

@@ -6,7 +6,7 @@
 <html prefix="og: https://ogp.me/ns#">
 
 <script type="module">
-	import { fetchStreamStatus, getDate, getOfflineTime, getBirthdayCountdown, getNextStreamTime } from './src/index.js';
+	import { fetchStreamStatus, getDate, getOfflineTime, getBirthdayCountdown, getNextStreamTime, getActualTimeDifference } from './src/index.js';
 	let status, offlineDate, streamDate;
 	async function start() {
 		try {
@@ -49,7 +49,7 @@
 
 		counterArray[0] = status.isLive ? "🐁" : getOfflineTime(offlineDate);
 		counterArray[1] = status.isLive ? "🐁"
-			: (status.nextStream ? getNextStreamTime(streamDate) : "where mimi???????????");
+			: ((status.nextStream && getActualTimeDifference(streamDate) > 0) ? getNextStreamTime(streamDate) : "where mimi???????????");
 		counterArray[2] = getBirthdayCountdown();
 		counterArray[3] = status.sorryCount;
 
