@@ -4,12 +4,12 @@
   font-family: bunny-snaps;
   src: url(./font/BunnySnaps.otf);
 }
-@media (min-width: 1000px) {
+@media (min-width: 100vh) {
   body {
     background-image: url('./img/mimi.jpg')
   }
 }
-@media (max-width: 1000px) {
+@media (max-width: 100vh) {
   body {
     background-image: url('./img/mimipeek.png')
   }
@@ -38,11 +38,11 @@ body, html {
   position-anchor: --anchor;
   position-area: center left;
 
-  margin-right: -60px;
+  margin-right: -6vh;
   z-index: -1;
 
   height: 100vh;
-  filter: drop-shadow(-10px 30px 20px black);
+  filter: drop-shadow(1vh 3vh 20px black);
 }
 
 .right-frill {
@@ -50,11 +50,11 @@ body, html {
   position-anchor: --anchor;
   position-area: center right;
 
-  margin-left: -60px;
+  margin-left: -6vh;
   z-index: -1;
 
   height: 100vh;
-  filter: drop-shadow(-10px 30px 20px black);
+  filter: drop-shadow(1vh 3vh 20px black);
   transform: rotateY(180deg);
 }
 
@@ -68,16 +68,16 @@ body, html {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-bottom: 17px;
+  padding-bottom: 2vh;
 
   margin: 0 auto;
 
   width: 17rem;
-  height: 100px;
+  height: 11vh;
 
-  border-radius: 8px;
-  border: #c8d5fd dashed 3px;
-  outline: #eeeddc solid 10px;
+  border-radius: 1vh;
+  border: #c8d5fd dashed 0.4vh;
+  outline: #eeeddc solid 1vh;
 }
 
 .the-main-thing-box-thing {
@@ -102,13 +102,13 @@ body, html {
   overflow-y: auto;
    
   box-sizing: border-box;
-  padding-top: 70px;
+  padding-top: 7vh;
 }
 
 .timer-label {
   margin-top: -5vh;
   font-size: 5vmin;
-  line-height: 0px;
+  line-height: 0vh;
 }
 
 .evil-ass-yearn-timer {
@@ -145,7 +145,7 @@ hr {
 }
 
 footer {
-  font-size: 13px;
+  font-size: 1.3vmin;
 
   margin-top: 2rem;
 }
