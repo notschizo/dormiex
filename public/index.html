@@ -4,6 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <link rel="stylesheet" href="style.css" type="text/css">
 <html prefix="og: https://ogp.me/ns#">
+<script src="https://unpkg.com/twemoji@latest/dist/twemoji.min.js" crossorigin="anonymous"></script>
 
 <script type="module">
 	import { fetchStreamStatus, getDate, getOfflineTime, getBirthdayCountdown, getNextStreamTime, getActualTimeDifference } from './src/index.js';
@@ -47,6 +48,8 @@
 		let timerLabel = document.getElementById("timer-label");
 		let actualTimer = document.getElementById("timer-actual-time");
 
+		document.getElementById("mimi").src = status.isLive ? "./img/mimi-online.png" : "./img/lonely-dormie.png"
+
 		counterArray[0] = status.isLive ? "🐁" : getOfflineTime(offlineDate);
 		counterArray[1] = status.isLive ? "🐁"
 			: ((status.nextStream && getActualTimeDifference(streamDate) > 0) ? getNextStreamTime(streamDate) : "where mimi???????????");
@@ -55,10 +58,7 @@
 
 		timerLabel.innerHTML = counterString[counterIndex];
 		actualTimer.innerHTML = counterArray[counterIndex];
-
-        if (status.isLive) {
-            document.getElementById("mimi").src = "./img/mimi-online.png";
-        }
+        twemoji.parse(document.body);
 	}
 
 	setInterval(render, 1000);
