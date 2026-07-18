@@ -55,6 +55,10 @@
 
 		timerLabel.innerHTML = counterString[counterIndex];
 		actualTimer.innerHTML = counterArray[counterIndex];
+
+        if (status.isLive) {
+            document.getElementById("mimi").src = "./img/mimi-online.png";
+        }
 	}
 
 	setInterval(render, 1000);
@@ -127,10 +131,4 @@
 </div>
 
 </body>
-<script type="module">
-    if (status.isLive) {
-        document.getElementById("mimi").src = "./img/mimi-online.png";
-    }
-        
-</script>
 </html>
