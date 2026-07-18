@@ -145,3 +145,45 @@ footer {
   font-size: 0.7vw;
   margin: 2rem;
 }
+
+@media (max-width: 100vh) {
+  body, html {
+      font-size: 3vw;
+    }
+
+    .header {
+      font-size: 6vw;
+    }
+
+    .the-main-thing-box-thing {
+      width: 80vw;
+    }
+
+    .timer-label {
+      font-size: 5vw;
+    }
+
+    .evil-ass-yearn-timer {
+      font-size: 5vw;
+
+    }
+
+    button {
+      font-size: 4vw;
+    }
+
+    .mainimg {
+      height: 30vw;
+      margin-top: 3vh;
+      width: 30vw;
+    }
+
+    .linkimg {
+      height: 2vw;
+      width: 2vw;
+    }
+
+    footer {
+      font-size: 1.5vw;
+    } 
+}
