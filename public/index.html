@@ -47,8 +47,6 @@
 		let timerLabel = document.getElementById("timer-label");
 		let actualTimer = document.getElementById("timer-actual-time");
 
-        document.getElementById("mimi").src = status.isLive ? "./img/mimi-online.png" : "./img/lonely-dormie.png"
-
 		counterArray[0] = status.isLive ? "🐁" : getOfflineTime(offlineDate);
 		counterArray[1] = status.isLive ? "🐁"
 			: ((status.nextStream && getActualTimeDifference(streamDate) > 0) ? getNextStreamTime(streamDate) : "where mimi???????????");
@@ -58,6 +56,9 @@
 		timerLabel.innerHTML = counterString[counterIndex];
 		actualTimer.innerHTML = counterArray[counterIndex];
 
+        if (status.isLive) {
+            document.getElementById("mimi").src = "./img/mimi-online.png";
+        }
 	}
 
 	setInterval(render, 1000);
@@ -90,43 +91,45 @@
 </head>
 
 <body>
-    <img id="left-frill" class="left-frill" src="./img/single-frill.png" alt="left frill">
-    <img id="right-frill" class="right-frill" src="./img/single-frill.png" alt="right frill">
-    <div class="the-main-thing-box-thing">
-        <div class="header">
-            <h1>i miss mimi</h1>
-        </div>
-        <div>
-            <img id="mimi" class="mainimg" src="./img/lonely-dormie.png" alt="dormies no mimi">
-
-	    <div class="divider"></div>
-	    <div id="timer-label" class="timer-label"><h1>Time since last seen:</h1></div>
-	    <div class="evil-ass-yearn-timer"><div id="timer-actual-time" class="timer-actual-time">timer</div></div>
-	    <button id="timer-button-left" class="button timer-button-left">&lt;</button>
-	    <button id="timer-button-right" class="button timer-button-right">&gt;</button>
-
-        <footer>
-            <div id="links">
-                <a href="https://twitter.com/NemimiYane" target="_blank"><img src="./img/x-logo.png" class="linkimg" alt="X" /></a>
-                <a href="https://www.youtube.com/@NemimiYane" target="_blank"><img src="./img/youtube-logo.png" class="linkimg" alt="YouTube" /></a>
-                <a href="https://www.twitch.tv/nemimiyane" target="_blank"><img src="./img/twitch-logo.png" class="linkimg" alt="Twitch" /></a>
+    <div class="box-wrapper">
+        <img id="left-frill" class="left-frill" src="./img/single-frill.png" alt="left frill">
+        <img id="right-frill" class="right-frill" src="./img/single-frill.png" alt="right frill">
+        <div class="the-main-thing-box-thing">
+            <div class="header">
+                <h1>i miss mimi</h1>
             </div>
-            <br>
-            <span id="emote-credits">Dormie Art by: @InkPhantoom</span>
-            <br>
-            <span id="emote-credits">Background Art by: @statalosa</span>
-            <br>
-            <span id="emote-credits">Mimi Art by: @strawrubiberryy</span>
-            <br>
-            <br>
-            <span id="footer-text">Made with 🩵 by Dormies</span>
-            <br>
-            <small>Not affiliated with Nemimi Yane</small>
-            <br>
-            <small>Inspired by <a href="https://imissnimi.com">imissnimi.com</a></small>
-        </footer>
+            <div>
+                <img id="mimi" class="mainimg" src="./img/lonely-dormie.png" alt="dormies no mimi">
 
-</div>
+	        <div class="divider"></div>
+	        <div id="timer-label" class="timer-label"><h1>Time since last seen:</h1></div>
+	        <div class="evil-ass-yearn-timer"><div id="timer-actual-time" class="timer-actual-time">timer</div></div>
+	        <button id="timer-button-left" class="button timer-button-left">&lt;</button>
+	        <button id="timer-button-right" class="button timer-button-right">&gt;</button>
+
+            <footer>
+                <div id="links">
+                    <a href="https://twitter.com/NemimiYane" target="_blank"><img src="./img/x-logo.png" class="linkimg" alt="X" /></a>
+                    <a href="https://www.youtube.com/@NemimiYane" target="_blank"><img src="./img/youtube-logo.png" class="linkimg" alt="YouTube" /></a>
+                    <a href="https://www.twitch.tv/nemimiyane" target="_blank"><img src="./img/twitch-logo.png" class="linkimg" alt="Twitch" /></a>
+                </div>
+                <br>
+                <span id="emote-credits">Dormie Art by: @InkPhantoom</span>
+                <br>
+                <span id="emote-credits">Background Art by: @statalosa</span>
+                <br>
+                <span id="emote-credits">Mimi Art by: @strawrubiberryy</span>
+                <br>
+                <br>
+                <span id="footer-text">Made with 🩵 by Dormies</span>
+                <br>
+                <small>Not affiliated with Nemimi Yane</small>
+                <br>
+                <small>Inspired by <a href="https://imissnimi.com">imissnimi.com</a></small>
+            </footer>
+
+        </div>
+    </div>
 </div>
 
 </body>
