@@ -42,7 +42,7 @@ jobs:
                 [triggers]
                 crons = ["*/5 * * * *"]
                 [vars]
-                TWITCH_CHANNEL_ID = "1223232545"
+                TWITCH_CHANNEL_ID = "672366427"
                 YOUTUBE_CHANNEL_ID = "UCReoJ7JCK8aD1yyBtzyKsJw"
                 [observability]
                 enabled = false
