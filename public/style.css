@@ -19,7 +19,7 @@ body, html {
   color: #96a8e9;
 
   margin: 0;
-
+  overflow: hidden;
 
   background-size: cover;
   background-position: center;
