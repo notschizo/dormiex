@@ -42,7 +42,7 @@ body, html {
   z-index: -1;
 
   height: 100vh;
-  filter: drop-shadow(1vh 3vh 20px black);
+  filter: drop-shadow(1vh 3vh 2vh black);
 }
 
 .right-frill {
@@ -54,7 +54,7 @@ body, html {
   z-index: -1;
 
   height: 100vh;
-  filter: drop-shadow(1vh 3vh 20px black);
+  filter: drop-shadow(1vh 3vh 2vh black);
   transform: rotateY(180deg);
 }
 
