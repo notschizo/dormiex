@@ -47,6 +47,8 @@
 		let timerLabel = document.getElementById("timer-label");
 		let actualTimer = document.getElementById("timer-actual-time");
 
+        document.getElementById("mimi").src = status.isLive ? "./img/mimi-online.png" : "./img/lonely-dormie.png"
+
 		counterArray[0] = status.isLive ? "🐁" : getOfflineTime(offlineDate);
 		counterArray[1] = status.isLive ? "🐁"
 			: ((status.nextStream && getActualTimeDifference(streamDate) > 0) ? getNextStreamTime(streamDate) : "where mimi???????????");
@@ -56,9 +58,6 @@
 		timerLabel.innerHTML = counterString[counterIndex];
 		actualTimer.innerHTML = counterArray[counterIndex];
 
-        if (status.isLive) {
-            document.getElementById("mimi").src = "./img/mimi-online.png";
-        }
 	}
 
 	setInterval(render, 1000);
