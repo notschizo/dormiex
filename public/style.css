@@ -139,12 +139,19 @@ hr {
 }
 
 .linkimg {
-  height: 1vw;
-  width: 1vw;
+  height: 2vw;
+  width: 2vw;
+}
+
+img.emoji {
+   height: 1em;
+   width: 1em;
+   margin: 0 .05em 0 .1em;
+   vertical-align: -0.1em;
 }
 
 footer {
-  font-size: 0.7vw;
+  font-size: 1vw;
   margin: 2rem;
 }
 
@@ -200,4 +207,24 @@ footer {
     footer {
       font-size: 1.5vw;
     } 
+}
+
+@media (max-width: 70vh) {
+  .left-frill {
+      margin-right: -12vw;
+    }
+
+    .right-frill {
+      margin-left: -12vw;
+    }
+}
+
+@media (max-width: 50vh) {
+  .left-frill {
+      margin-right: -16vw;
+    }
+
+  .right-frill {
+    margin-left: -16vw;
+  }
 }
