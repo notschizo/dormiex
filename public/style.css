@@ -28,7 +28,7 @@ body, html {
   box-sizing: border-box;
 
   font-family: bunny-snaps;
-  font-size: 3vmin;
+  font-size: 1.5vw;
   text-align: center;
   padding-top: env(safe-area-inset-top);
 }
@@ -63,7 +63,7 @@ body, html {
   color: #adc1f9;
 
   font-family: bunny-snaps;
-  font-size: 6vmin;
+  font-size: 3vw;
 
   display: flex;
   justify-content: center;
@@ -89,12 +89,11 @@ body, html {
   background-image: radial-gradient(#eff6fc 5%, transparent 5%),
       radial-gradient(#eff6fc 5%, transparent 5%);
   background-color: #d7dcfe;
-  background-position: 0 0, 50px 50px;
-  background-size: 100px 100px;
+  background-position: 0 0, 5vh 5vh;
+  background-size: 10vh 10vh;
   
   min-height: 100dvh;
-  width: 1000px;
-  max-width: 70%;
+  width: 50vw;
   height: 100vh;
     
   margin: 0 auto;
@@ -106,14 +105,12 @@ body, html {
 }
 
 .timer-label {
-  margin-top: -5vh;
-  font-size: 5vmin;
-  line-height: 0vh;
+  font-size: 2.5vw;
+  line-height: 2vh;
 }
 
 .evil-ass-yearn-timer {
-  margin-top: -2vh;
-  font-size: 5vmin;
+  font-size: 2.5vw;
   font-family: "Quicksand", serif;
 }
 
@@ -123,29 +120,28 @@ button {
   border-radius: 0.5rem;
   color: #d5dcf6;
   font-family: "Quicksand", serif;
-  font-size: 4vmin;
+  font-size: 2vw;
   padding: 0.5rem 1rem;
   margin-top: 1rem;
 }
 
 hr {
-  border-top: 0.25vmin solid #96a8e9;
+  border-top: 0.25vh solid #96a8e9;
   width: 50%;
 }
 
 .mainimg {
-  height: 30vmin;
-  margin-top: 3vmin;
-  width: 30vmin;
+  height: 15vw;
+  margin-top: 3vh;
+  width: 15vw;
 }
 
 .linkimg {
-  height: 2vmin;
-  width: 2vmin;
+  height: 1vw;
+  width: 1vw;
 }
 
 footer {
-  font-size: 1.3vmin;
-
-  margin-top: 2rem;
+  font-size: 0.7vw;
+  margin: 2rem;
 }
