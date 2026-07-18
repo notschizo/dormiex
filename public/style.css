@@ -1,5 +1,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap");
 @import url('https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&family=Crafty+Girls&display=swap');
+@font-face {
+  font-family: bunny-snaps;
+  src: url(./font/BunnySnaps.otf);
+}
 @media (min-width: 1000px) {
   body {
     background-image: url('./img/mimi.jpg')
@@ -23,52 +27,74 @@ body, html {
   min-height: 100dvh;
   box-sizing: border-box;
 
-  font-family: "Quicksand", serif;
+  font-family: bunny-snaps;
   font-size: 3vmin;
   text-align: center;
   padding-top: env(safe-area-inset-top);
 }
 
+.left-frill {
+  position: absolute;
+  position-anchor: --anchor;
+  position-area: center left;
 
+  margin-right: -60px;
+  z-index: -1;
+
+  height: 100vh;
+  filter: drop-shadow(-10px 30px 20px black);
+}
+
+.right-frill {
+  position: absolute;
+  position-anchor: --anchor;
+  position-area: center right;
+
+  margin-left: -60px;
+  z-index: -1;
+
+  height: 100vh;
+  filter: drop-shadow(-10px 30px 20px black);
+  transform: rotateY(180deg);
+}
 
 .header {
-  background-color: #e6c3cd;
-  color: #9aa4fc;
+  background-color: #eeeddc;
+  color: #adc1f9;
 
-  font-family: "Crafty Girls", cursive;
-  font-size: 4vmin;
+  font-family: bunny-snaps;
+  font-size: 6vmin;
 
   display: flex;
   justify-content: center;
   align-items: center;
+  padding-bottom: 17px;
 
   margin: 0 auto;
-
-  -webkit-text-stroke: 7px #fff;
-  paint-order: stroke fill;
 
   width: 17rem;
   height: 100px;
 
   border-radius: 8px;
-  border: #fff dashed 2px;
-  outline: #e6c3cd solid 10px;
+  border: #c8d5fd dashed 3px;
+  outline: #eeeddc solid 10px;
 }
 
 .the-main-thing-box-thing {
+  anchor-name: --anchor;
   scrollbar-width: none;
   background-color: #c8d5fd;
   color: #7b92e8;
-    
-  background-image: radial-gradient(#dde4fe 5%, transparent 5%),
-      radial-gradient(#dde4fe 5%, transparent 5%);
-  background-color: #c8d5fd;
+  
+  background-image: radial-gradient(#eff6fc 5%, transparent 5%),
+      radial-gradient(#eff6fc 5%, transparent 5%);
+  background-color: #d7dcfe;
   background-position: 0 0, 50px 50px;
   background-size: 100px 100px;
   
   min-height: 100dvh;
   width: 1000px;
-  max-width: 90%;
+  max-width: 70%;
   height: 100vh;
     
   margin: 0 auto;
@@ -76,16 +102,18 @@ body, html {
   overflow-y: auto;
    
   box-sizing: border-box;
-  padding: 30px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  padding-top: 70px;
 }
 
 .timer-label {
-  line-height: 8px;
+  margin-top: -5vh;
+  font-size: 5vmin;
+  line-height: 0px;
 }
 
 .evil-ass-yearn-timer {
-  font-size: 5vmin
+  margin-top: -2vh;
+  font-size: 8vmin
 }
 
 button {
@@ -105,10 +133,9 @@ hr {
 }
 
 .mainimg {
-  border: 0.25vmin solid #96a8e9;
-  height: 32vmin;
-  margin: 3vmin;
-  width: 32vmin;
+  height: 30vmin;
+  margin-top: 3vmin;
+  width: 30vmin;
 }
 
 .linkimg {
@@ -117,7 +144,7 @@ hr {
 }
 
 footer {
-  font-size: 10px;
+  font-size: 13px;
 
   margin-top: 2rem;
 }

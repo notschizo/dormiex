@@ -24,7 +24,7 @@
 
 	let counterIndex = 0;
 	let counterArray = ["", "", "",""];
-	let counterString = ["<h1>Time since last seen:</h1>","<h1>Time until next stream:</h1>", "<h1>Time until birthday:</h1>", "<h1>Times apologized:</h1>"];
+	let counterString = ["<h1>time since last seen:</h1>","<h1>time until next stream:</h1>", "<h1>time until birthday:</h1>", "<h1>times apologized:</h1>"];
 
 	function changeCounterType(direction = "right") {
     if (direction == "right") {
@@ -73,7 +73,6 @@
 	});
 
 
-
 </script>
 
 <head>
@@ -88,12 +87,14 @@
 </head>
 
 <body>
+    <img id="left-frill" class="left-frill" src="./img/single-frill.png" alt="left frill">
+    <img id="right-frill" class="right-frill" src="./img/single-frill.png" alt="right frill">
     <div class="the-main-thing-box-thing">
         <div class="header">
             <h1>i miss mimi</h1>
         </div>
         <div>
-            <img id="mimi" class="mainimg" src="./img/dormies-no-mimi.png" alt="dormies no mimi">
+            <img id="mimi" class="mainimg" src="./img/lonely-dormie.png" alt="dormies no mimi">
 
 	    <div class="divider"></div>
 	    <div id="timer-label" class="timer-label"><h1>Time since last seen:</h1></div>
@@ -112,6 +113,8 @@
             <br>
             <span id="emote-credits">Background Art by: @statalosa</span>
             <br>
+            <span id="emote-credits">Mimi Art by: @strawrubiberryy</span>
+            <br>
             <br>
             <span id="footer-text">Made with 🩵 by Dormies</span>
             <br>
@@ -124,4 +127,10 @@
 </div>
 
 </body>
+<script type="module">
+    if (status.isLive) {
+        document.getElementById("mimi").src = "./img/mimi-online.png";
+    }
+        
+</script>
 </html>
