@@ -113,7 +113,8 @@ body, html {
 
 .evil-ass-yearn-timer {
   margin-top: -2vh;
-  font-size: 8vmin
+  font-size: 5vmin;
+  font-family: "Quicksand", serif;
 }
 
 button {
