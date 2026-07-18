@@ -38,7 +38,7 @@ body, html {
   position-anchor: --anchor;
   position-area: center left;
 
-  margin-right: -6vh;
+  margin-right: -3vw;
   z-index: -1;
 
   height: 100vh;
@@ -50,7 +50,7 @@ body, html {
   position-anchor: --anchor;
   position-area: center right;
 
-  margin-left: -6vh;
+  margin-left: -3vw;
   z-index: -1;
 
   height: 100vh;
@@ -149,6 +149,14 @@ footer {
 @media (max-width: 100vh) {
   body, html {
       font-size: 3vw;
+    }
+
+    .left-frill {
+      margin-right: -6vw;
+    }
+
+    .right-frill {
+      margin-left: -6vw;
     }
 
     .header {
