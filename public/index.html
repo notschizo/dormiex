@@ -59,6 +59,10 @@
 		timerLabel.innerHTML = counterString[counterIndex];
 		actualTimer.innerHTML = counterArray[counterIndex];
         twemoji.parse(document.body);
+		
+		if (status.isLive) {
+            document.getElementById("mimi").src = "./img/mimi-online.png";
+        }
 	}
 
 	setInterval(render, 1000);
