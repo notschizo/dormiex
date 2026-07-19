@@ -52,18 +52,15 @@
 
 		counterArray[0] = status.isLive ? "🐁" : getOfflineTime(offlineDate);
 		counterArray[1] = status.isLive ? "🐁"
-			: ((status.nextStream && getActualTimeDifference(streamDate) > 0) ? getNextStreamTime(streamDate) : "where mimi???????????");
+			: ((status.nextStream && getActualTimeDifference(streamDate) > 0 && getActualTimeDifference(streamDate) < 15780000000) ? getNextStreamTime(streamDate) : "where mimi???????????");
 		counterArray[2] = getBirthdayCountdown();
 		counterArray[3] = status.sorryCount;
 
 		timerLabel.innerHTML = counterString[counterIndex];
 		actualTimer.innerHTML = counterArray[counterIndex];
         twemoji.parse(document.body);
+    }
 		
-		if (status.isLive) {
-            document.getElementById("mimi").src = "./img/mimi-online.png";
-        }
-	}
 
 	setInterval(render, 1000);
 
