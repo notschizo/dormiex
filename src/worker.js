@@ -307,6 +307,10 @@ export default {
 		}
 
 		if (url.pathname === '/api/connect') {
+			const secret = request.headers.get('X-Connect-Secret');
+			if (!secret || secret !== env.CONNECT_SECRET) {
+				return new Response('unauthorized', { status: 401 });
+			}
 			const id = env.TWITCH_EVENTSUB.idFromName('default');
 			const stub = env.TWITCH_EVENTSUB.get(id);
 			return stub.fetch(new Request('https://internal/connect'));
