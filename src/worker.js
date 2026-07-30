@@ -257,11 +257,16 @@ export class TwitchEventSub {
 			const playlistSearchUrl = `https://www.googleapis.com/youtube/v3/playlistItems?part=contentDetails&playlistId=${this.env.YOUTUBE_PLAYLIST_ID}&key=${this.env.YOUTUBE_API_KEY}`;
 			const playlistSearchResponse = await fetch(playlistSearchUrl);
 			const playlistSearchData = await playlistSearchResponse.json();
+			console.log(playlistSearchData)
 
 			if (playlistSearchData.items && playlistSearchData.items.length > 0) {
 				for (let item of playlistSearchData.items) {
+					console.log(toString(item));
 					if (item.contentDetails && item.contentDetails.videoId) {
+						console.log(item.contentDetails.videoId);
 						playlistVideoList.push(item.contentDetails.videoId);
+						console.log(playlistVideoList);
+						console.log(JSON.stringify(playlistVideoList));
 					}
 				}
 				await this.env.STREAM_DATA.put('playlist_items', JSON.stringify(playlistVideoList));
