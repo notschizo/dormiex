@@ -108,3 +108,19 @@ function formatTimeStamp(milliseconds) {
 	}
 	return formattedTime;
 }
+
+function getRandomInt(min, max) {
+  const minCeiled = Math.ceil(min);
+  const maxFloored = Math.floor(max);
+  return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled);
+}
+
+function getRandomItem(array) {
+	let arrayIndex = getRandomInt(0, array.length);
+	return array[arrayIndex];
+}
+
+function getPlaylistItem(array) {
+	let videoId = getRandomItem(array);
+	return `https://www.youtube.com/embed/${videoId}`;
+}

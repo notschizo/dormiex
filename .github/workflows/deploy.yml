@@ -44,6 +44,7 @@ jobs:
                 [vars]
                 TWITCH_CHANNEL_ID = "1223232545"
                 YOUTUBE_CHANNEL_ID = "UCReoJ7JCK8aD1yyBtzyKsJw"
+                YOUTUBE_PLAYLIST_ID = "PLVWeVxBh7q-Y"
                 [observability]
                 enabled = false
                 head_sampling_rate = 1

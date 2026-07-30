@@ -116,6 +116,7 @@ export class TwitchEventSub {
 	async syncInitialState() {
 		console.log('getting current state');
 		try {
+			await this.getPlaylistItems();
 			await this.getNextStream();
 			const currentToken = await this.getAccessToken();
 			const response = await fetch(`https://api.twitch.tv/helix/streams?user_id=${this.env.TWITCH_CHANNEL_ID}`, {
@@ -243,8 +244,32 @@ export class TwitchEventSub {
 		console.log('checking connection(alarm)');
 		await this.ensureConnected();
 		await this.getNextStream();
+		await this.getPlaylistItems();
 		if (this.ws && this.ws.readyState <= 1) {
 			await this.state.storage.setAlarm(Date.now() + ALARM_INTERVAL_MS);
+		}
+	}
+	async getPlaylistItems() {
+		const playlistVideoList = []
+		if (!this.env.YOUTUBE_API_KEY || !this.env.YOUTUBE_PLAYLIST_ID) return;
+
+		try {
+			const playlistSearchUrl = `https://www.googleapis.com/youtube/v3/playlistItems?part=contentDetails&playlistId=${this.env.YOUTUBE_PLAYLIST_ID}&key=${this.env.YOUTUBE_API_KEY}`;
+			const playlistSearchResponse = await fetch(playlistSearchUrl);
+			const playlistSearchData = await playlistSearchResponse.json();
+
+			if (playlistSearchData.items && playlistSearchData.items.length > 0) {
+				for (let item of playlistSearchData.items) {
+					if (item.contentDetails && item.contentDetails.videoId) {
+						playlistVideoList.push(item.contentDetails.videoId);
+					}
+				}
+				await this.env.STREAM_DATA.put('playlist_items', JSON.stringify(playlistVideoList));
+			} else {
+				await this.env.STREAM_DATA.put('playlist_items', '[]');
+			}
+		} catch(err) {
+			console.error('cant get playlist info:', err)
 		}
 	}
 
@@ -287,17 +312,27 @@ export default {
 		const url = new URL(request.url);
 
 		if (url.pathname === '/api/status') {
-			const [isLiveStr, offlineTimestamp, sorryCount, nextStream] = await Promise.all([
+			const [isLiveStr, offlineTimestamp, sorryCount, nextStream, playlistItemsRaw] = await Promise.all([
 				env.STREAM_DATA.get('is_live'),
 				env.STREAM_DATA.get('offline_timestamp'),
 				env.STREAM_DATA.get('sorry_count'),
-				env.STREAM_DATA.get('next_stream')
+				env.STREAM_DATA.get('next_stream'),
+				env.STREAM_DATA.get('playlist_items')
 			]);
+
+			let playlist = [];
+            try {
+                playlist = playlistItemsRaw ? JSON.parse(playlistItemsRaw) : [];
+            } catch (err) {
+                playlist = [];
+            }
+
 			return Response.json({
 				isLive: isLiveStr === 'true',
 				offlineTimestamp,
 				sorryCount: sorryCount || "0",
-				nextStream
+				nextStream,
+				playlist
 			}, {
 				headers: {
 					'Cache-Control': 'no-store, max-age=0, must-revalidate',
