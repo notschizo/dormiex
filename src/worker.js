@@ -27,9 +27,9 @@ export class TwitchEventSub {
 
 		const params = new URLSearchParams({
 			client_id: this.env.TWITCH_CLIENT_ID.trim(),
-										   client_secret: clientSecret.trim(),
-										   grant_type: 'refresh_token',
-										   refresh_token: refreshToken.trim()
+			client_secret: clientSecret.trim(),
+			grant_type: 'refresh_token',
+			refresh_token: refreshToken.trim()
 		});
 
 		const response = await fetch('https://id.twitch.tv/oauth2/token', {
@@ -123,7 +123,7 @@ export class TwitchEventSub {
 				method: 'GET',
 				headers: {
 					'Client-ID': this.env.TWITCH_CLIENT_ID.trim(),
-										 'Authorization': `Bearer ${currentToken}`
+					'Authorization': `Bearer ${currentToken}`
 				}
 			});
 
