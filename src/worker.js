@@ -1,5 +1,5 @@
 const EVENTSUB_WS_URL = 'wss://eventsub.wss.twitch.tv/ws?keepalive_timeout_seconds=30';
-const ALARM_INTERVAL_MS = 30 * 60 * 1000;
+const ALARM_INTERVAL_MS = 60 * 60 * 1000;
 
 export class TwitchEventSub {
 	constructor(state, env) {
@@ -250,24 +250,38 @@ export class TwitchEventSub {
 		}
 	}
 	async getPlaylistItems() {
-		const playlistVideoList = []
+		let nextPageToken
+		let nextPageArg
+		let newPages = true
+		let playlistVideoList = []
 		if (!this.env.YOUTUBE_API_KEY || !this.env.YOUTUBE_PLAYLIST_ID) return;
 
 		try {
-			const playlistSearchUrl = `https://www.googleapis.com/youtube/v3/playlistItems?part=contentDetails&playlistId=${this.env.YOUTUBE_PLAYLIST_ID}&key=${this.env.YOUTUBE_API_KEY}`;
-			const playlistSearchResponse = await fetch(playlistSearchUrl);
-			const playlistSearchData = await playlistSearchResponse.json();
+			while (newPages) {
+				if (nextPageToken) {
+					nextPageArg = `&pageToken=${nextPageToken}`
+				} else {
+					nextPageArg = ''
+				}
+				let playlistSearchUrl = `https://www.googleapis.com/youtube/v3/playlistItems?part=contentDetails&maxResults=50&playlistId=${this.env.YOUTUBE_PLAYLIST_ID}&key=${this.env.YOUTUBE_API_KEY}${nextPageArg}`;
+				let playlistSearchResponse = await fetch(playlistSearchUrl);
+				let playlistSearchData = await playlistSearchResponse.json();
 
-			if (playlistSearchData.items && playlistSearchData.items.length > 0) {
-				for (let item of playlistSearchData.items) {
-					if (item.contentDetails && item.contentDetails.videoId) {
-						playlistVideoList.push(item.contentDetails.videoId);
+				if (playlistSearchData.items && playlistSearchData.items.length > 0) {
+					for (let item of playlistSearchData.items) {
+						if (item.contentDetails && item.contentDetails.videoId) {
+							playlistVideoList.push(item.contentDetails.videoId);
+						}
 					}
 				}
-				await this.env.STREAM_DATA.put('playlist_items', JSON.stringify(playlistVideoList));
-			} else {
-				await this.env.STREAM_DATA.put('playlist_items', '[]');
+				if (playlistSearchData.nextPageToken) {
+					nextPageToken = playlistSearchData.nextPageToken;
+				} else {
+					nextPageToken = null;
+					newPages = false
+				}
 			}
+			await this.env.STREAM_DATA.put('playlist_items', JSON.stringify(playlistVideoList));
 		} catch(err) {
 			console.error('cant get playlist info:', err)
 		}
