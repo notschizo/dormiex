@@ -109,7 +109,8 @@ body, html {
 .yt-embed {
   margin: 1rem;
   width: 30vw;
-  height: 16.875vw
+  height: auto;
+  aspect-ratio: 16 / 9;
 }
 
 .timer-label {
@@ -201,7 +202,8 @@ footer {
 
     .yt-embed {
       width: 60vw;
-      height: 33.75vw
+      height: auto;
+      aspect-ratio: 16 / 9;
     }
 
     .mainimg {
