@@ -120,7 +120,7 @@ function getRandomItem(array) {
 	return array[arrayIndex];
 }
 
-function getPlaylistItem(array) {
+export function getPlaylistItem(array) {
 	let videoId = getRandomItem(array);
 	return `https://www.youtube.com/embed/${videoId}`;
 }
