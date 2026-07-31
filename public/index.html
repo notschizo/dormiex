@@ -18,6 +18,7 @@
 			console.log(offlineDate);
 			console.log(streamDate);
 			render();
+            document.getElementById("video").src = getPlaylistItem(status.playlist);
 		} catch (err) {
 			console.error("oops!");
 		}
@@ -48,7 +49,7 @@
 		let timerLabel = document.getElementById("timer-label");
 		let actualTimer = document.getElementById("timer-actual-time");
 
-		document.getElementById("mimi").src = status.isLive ? "./img/mimi-online.png" : "./img/lonely-dormie.png"
+		document.getElementById("mimi").src = status.isLive ? "./img/mimi-online.png" : "./img/lonely-dormie.png";
 
 		counterArray[0] = status.isLive ? "🐁" : getOfflineTime(offlineDate);
 		counterArray[1] = status.isLive ? "🐁"
@@ -99,14 +100,16 @@
             <div class="header">
                 <h1>i miss mimi</h1>
             </div>
-            <div>
-                <img id="mimi" class="mainimg" src="./img/lonely-dormie.png" alt="dormies no mimi">
-
+            <div><img id="mimi" class="mainimg" src="./img/lonely-dormie.png" alt="dormies no mimi"></div>
 	        <div class="divider"></div>
 	        <div id="timer-label" class="timer-label"><h1>Time since last seen:</h1></div>
 	        <div class="evil-ass-yearn-timer"><div id="timer-actual-time" class="timer-actual-time">timer</div></div>
 	        <button id="timer-button-left" class="button timer-button-left">&lt;</button>
 	        <button id="timer-button-right" class="button timer-button-right">&gt;</button>
+            <div><iframe id="video" class="yt-embed" src="https://www.youtube.com/embed/FcZepA25wOw" 
+                title="YouTube video player" frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
 
             <footer>
                 <div id="links">
