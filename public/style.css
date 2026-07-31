@@ -199,6 +199,11 @@ footer {
       font-size: 4vw;
     }
 
+    .yt-embed {
+      width: 60vw;
+      height: 33.75vw
+    }
+
     .mainimg {
       height: 30vw;
       margin-top: 3vh;
