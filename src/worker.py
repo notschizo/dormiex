@@ -56,6 +56,13 @@ class TwitchEventSub(DurableObject):
 		return data['access_token']
 
 	async def ensureConnected(self):
+		current_alarm = await self.storage.getAlarm()
+		if not current_alarm:
+			print("scheduling new alarm")
+			await self.storage.setAlarm(int(time.time() * 1000) + self.alarm_ms)
+		else:
+			print("alarm is hopefully fine")
+
 		if self.ws and getattr(self.ws, "readyState", None) == 1:
 			print("socket is open(?)")
 			return
@@ -304,8 +311,7 @@ class TwitchEventSub(DurableObject):
 		await self.ensureConnected()
 		await self.getNextStream()
 		await self.getPlaylist()
-		if self.ws and getattr(self.ws, "readyState", 0) <= 1:
-			await self.storage.setAlarm(int(time.time() * 1000) + self.alarm_ms)
+		await self.storage.setAlarm(int(time.time() * 1000) + self.alarm_ms)
 
 	async def fetch(self, request):
 		from js import URL, Response
