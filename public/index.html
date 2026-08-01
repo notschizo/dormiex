@@ -8,11 +8,12 @@
 
 <script type="module">
 	import { fetchStreamStatus, getDate, getOfflineTime, getBirthdayCountdown, getNextStreamTime, getActualTimeDifference, getPlaylistItem } from './src/index.js';
-	let status, offlineDate, streamDate;
+	let status, offlineDate, streamDate, isLive;
 	async function start() {
 		try {
 			status = await fetchStreamStatus();
 			console.log(status);
+			isLive = status.isLive === "true"
 			offlineDate = await getDate(status.offlineTimestamp);
 			streamDate = await getDate(status.nextStream);
 			console.log(offlineDate);
@@ -49,10 +50,10 @@
 		let timerLabel = document.getElementById("timer-label");
 		let actualTimer = document.getElementById("timer-actual-time");
 
-		document.getElementById("mimi").src = status.isLive ? "./img/mimi-online.png" : "./img/lonely-dormie.png";
+		document.getElementById("mimi").src = isLive ? "./img/mimi-online.png" : "./img/lonely-dormie.png";
 
-		counterArray[0] = status.isLive ? "🐁" : getOfflineTime(offlineDate);
-		counterArray[1] = status.isLive ? "🐁"
+		counterArray[0] = isLive ? "🐁" : getOfflineTime(offlineDate);
+		counterArray[1] = isLive ? "🐁"
 			: ((status.nextStream && getActualTimeDifference(streamDate) > 0 && getActualTimeDifference(streamDate) < 15780000000) ? getNextStreamTime(streamDate) : "where mimi???????????");
 		counterArray[2] = getBirthdayCountdown();
 		counterArray[3] = status.sorryCount;
@@ -67,6 +68,7 @@
 
 	setInterval(async function() {
 		status = await fetchStreamStatus();
+		isLive = status.isLive === "true"
 		offlineDate = await getDate(status.offlineTimestamp);
 		streamDate = await getDate(status.nextStream);
 	}, 30000);

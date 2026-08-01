@@ -11,18 +11,24 @@ jobs:
         name: Deploy
         steps:
             - uses: actions/checkout@v6
-            - uses: actions/setup-node@v6
+            - uses: actions/setup-python@v5
               with:
-                node-version: '24.18.0'
-                cache: 'npm'
+                python-version: '3.13'
+
+            - name: Install uv
+              uses: astral-sh/setup-uv@v5
+
+            - name: Install dependencies
+              run: uv sync
 
             - name: Create wrangler.toml
               run: |
                 cat << EOF > wrangler.toml
                 name = "${{ vars.CF_WORKER_NAME }}"
-                main = "src/worker.js"
+                main = "src/worker.py"
                 account_id = "${{ secrets.CF_ACCOUNT_ID }}"
                 compatibility_date = "${{ vars.CF_COMPATIBILITY_DATE }}"
+                compatibility_flags = [ "python_workers" ]
                 send_metrics = false
                 workers_dev = false
                 preview_urls = false
@@ -60,11 +66,8 @@ jobs:
                 persist = true
                 head_sampling_rate = 1
                 EOF
-            - name: Deploy with Wrangler
-              uses: cloudflare/wrangler-action@v4
+            - name: Deploy with Pywrangler
+              run: uv run pywrangler deploy
               env:
                 CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-              with:
-                apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-                accountId: ${{ secrets.CF_ACCOUNT_ID }}
-                command: deploy
+                CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
