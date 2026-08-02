@@ -93,10 +93,10 @@ class TwitchEventSub(DurableObject):
 
 				await self.parse_message(data)
 			except Exception as err:
-				await webhook_report(f"cant parse: {event.data}, error: {err}")
+				await self.webhook_report(f"cant parse: {event.data}, error: {err}")
 
 		async def on_close(event):
-			await webhook_report(f"socket closed, code: {getattr(event, 'code', 'unknown')}, reason: {getattr(event, 'reason', 'unknown')}")
+			await self.webhook_report(f"socket closed, code: {getattr(event, 'code', 'unknown')}, reason: {getattr(event, 'reason', 'unknown')}")
 			self.sessionId = None
 			print("scheduling new alarm")
 			await self.storage.setAlarm(int(time.time() * 1000) + 5000)
@@ -105,7 +105,7 @@ class TwitchEventSub(DurableObject):
 			if ws != self.ws:
 				return
 			error_message = getattr(event, "message", None) or "????"
-			await webhook_report(f"error: {error_message}")
+			await self.webhook_report(f"error: {error_message}")
 
 		import asyncio
 		def bind_async(coro_func):
@@ -152,7 +152,7 @@ class TwitchEventSub(DurableObject):
 
 					if match:
 						sorry_count = match.group(1)
-						await webhook_report(f"new sorry count: {sorry_count}")
+						await self.webhook_report(f"new sorry count: {sorry_count}")
 						await self.env.STREAM_DATA.put("sorry_count", sorry_count)
 			elif sub_type == "session_keepalive":
 				pass
@@ -211,11 +211,11 @@ class TwitchEventSub(DurableObject):
 
 				if not response.ok:
 					error_text = await response.text()
-					await webhook_report(f"sub failed for {sub['type']}, status: {response.status}, response: {error_text}")
+					await self.webhook_report(f"sub failed for {sub['type']}, status: {response.status}, response: {error_text}")
 				else:
 					print(f"subscribed to {sub['type']}")
 			except Exception as err:
-				await webhook_report(f"failed to subscribe to {sub['type']}: {err}")
+				await self.webhook_report(f"failed to subscribe to {sub['type']}: {err}")
 
 	async def getInitialInfo(self):
 		print("getting current state")
@@ -235,7 +235,7 @@ class TwitchEventSub(DurableObject):
 
 			if not response.ok:
 				error_text = await response.text()
-				await webhook_report(f"failed to get state: {error_text}")
+				await self.webhook_report(f"failed to get state: {error_text}")
 				return
 
 			data = await response.json()
@@ -245,12 +245,12 @@ class TwitchEventSub(DurableObject):
 			else:
 				await self.env.STREAM_DATA.put("is_live", "false")
 		except Exception as err:
-			await webhook_report(f"error getting state: {err}")
+			await self.webhook_report(f"error getting state: {err}")
 
 	async def getNextStream(self):
-		await webhook_report("getting next stream")
+		await self.webhook_report("getting next stream")
 		if not (self.env.YOUTUBE_API_KEY and self.env.YOUTUBE_CHANNEL_ID):
-			await webhook_report("missing something")
+			await self.webhook_report("missing something")
 			return
 
 		try:
@@ -281,17 +281,17 @@ class TwitchEventSub(DurableObject):
 					unix_timestamp = int(dt.timestamp())
 
 					await self.env.STREAM_DATA.put("next_stream", str(unix_timestamp))
-					await webhook_report(f"got stream time: {start_time}")
+					await self.webhook_report(f"got stream time: {start_time}")
 			else:
 				print("no data from stream fetch")
 		except Exception as err:
-			await webhook_report(f"error getting next stream: {err}")
+			await self.webhook_report(f"error getting next stream: {err}")
 
 	async def getPlaylist(self):
 		if not (self.env.YOUTUBE_API_KEY and self.env.YOUTUBE_PLAYLIST_ID):
-			await webhook_report("missing something")
+			await self.webhook_report("missing something")
 			return
-		await webhook_report("getting playlist info")
+		await self.webhook_report("getting playlist info")
 		next_page = None
 		page_arg = None
 		new_pages = True
@@ -311,7 +311,7 @@ class TwitchEventSub(DurableObject):
 						if item.get('contentDetails') and len(item['contentDetails']) > 0:
 							video_list.append(item['contentDetails']['videoId'])
 				else:
-					await webhook_report("no data from playlist fetch")
+					await self.webhook_report("no data from playlist fetch")
 
 				if data.get('nextPageToken'):
 					next_page = data.get('nextPageToken')
@@ -320,7 +320,7 @@ class TwitchEventSub(DurableObject):
 					new_pages = False
 			await self.env.STREAM_DATA.put("playlist_items", json.dumps(video_list))
 		except Exception as err:
-			await webhook_report(f"error fetching playlist: {err}")
+			await self.webhook_report(f"error fetching playlist: {err}")
 
 	async def webhook_report(self, log_string):
 		print(log_string)
@@ -339,7 +339,7 @@ class TwitchEventSub(DurableObject):
 		)
 
 	async def alarm(self):
-		await webhook_report("checking connections(alarm)")
+		await self.webhook_report("checking connections(alarm)")
 		await self.ensureConnected()
 		await self.getNextStream()
 		await self.getPlaylist()
