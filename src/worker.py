@@ -132,7 +132,7 @@ class TwitchEventSub(DurableObject):
 				await self.env.STREAM_DATA.put("is_live", "true")
 				print("stream online")
 			elif sub_type == "stream.offline":
-				offline_timestamp = int(time.time() * 1000)
+				offline_timestamp = int(time.time())
 				await self.env.STREAM_DATA.put("offline_timestamp", str(offline_timestamp))
 				await self.env.STREAM_DATA.put("is_live", "false")
 				print(f"stream offline at {offline_timestamp}")
