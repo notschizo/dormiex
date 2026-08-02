@@ -335,29 +335,8 @@ class TwitchEventSub(DurableObject):
 		print(f"fetch request: {url.pathname}")
 
 		if url.pathname == "/connect":
-			action = url.searchParams.get("action")
-			print(f"running {action}")
-
-			if action == "connect":
-				await self.ensureConnected()
-				return Response.new("checking connection")
-			elif action == "help":
-				return Response.new("help, connect, playlist, next_stream, alarm_check")
-			elif action == "playlist":
-				await self.getPlaylist()
-				return Response.new("fetching playlist")
-			elif action == "next_stream":
-				await self.getNextStream()
-				return Response.new("fetching next stream")
-			elif action == "alarm_check":
-				current_alarm = await self.storage.getAlarm()
-				if not current_alarm:
-					await self.ensureConnected()
-					return Response.new("no alarm, starting new one")
-				else:
-					return Response.new("alarm is fine")
-			else:
-				return Response.new("command not found")
+			await self.ensureConnected()
+			return Response.new("ok")
 		return Response.new("not found", Object.fromEntries([("status", 404)]))
 
 class Default(WorkerEntrypoint):
@@ -397,23 +376,9 @@ class Default(WorkerEntrypoint):
 			secret = request.headers.get("X-Connect-Secret")
 			if not secret or secret != self.env.CONNECT_SECRET:
 				return Response.new("unauthorized", Object.fromEntries([("status", 401)]))
-
-			command = "connect"
-			try:
-				body = await request.json()
-				if body and "command" in body:
-					command=body['command']
-			except Exception:
-				pass
-
 			do_id = self.env.TWITCH_EVENTSUB.idFromName('default')
 			stub = self.env.TWITCH_EVENTSUB.get(do_id)
-
-			connect_request = Request.new(
-				f"https://internal/connect?action={command}",
-				method="POST"
-			)
-			return await stub.fetch(connect_request)
+			return await stub.fetch(Request.new('https://internal/connect'))
 
 		return await self.env.ASSETS.fetch(request)
 
@@ -423,5 +388,5 @@ class Default(WorkerEntrypoint):
 		durable_id = self.env.TWITCH_EVENTSUB.idFromName("default")
 		stub = self.env.TWITCH_EVENTSUB.get(durable_id)
 
-		await stub.fetch(Request.new("https://internal/connect?action=connect"))
+		await stub.fetch(Request.new("https://internal/connect"))
 
