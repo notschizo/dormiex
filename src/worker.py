@@ -242,7 +242,9 @@ class TwitchEventSub(DurableObject):
 			print(f"error getting state: {err}")
 
 	async def getNextStream(self):
+		print("getting next stream")
 		if not (self.env.YOUTUBE_API_KEY and self.env.YOUTUBE_CHANNEL_ID):
+			print("missing something")
 			return
 
 		try:
@@ -274,10 +276,16 @@ class TwitchEventSub(DurableObject):
 
 					await self.env.STREAM_DATA.put("next_stream", str(unix_timestamp))
 					print(f"got stream time: {start_time}")
+			else:
+				print("no data from stream fetch")
 		except Exception as err:
 			print(f"error getting next stream: {err}")
 
 	async def getPlaylist(self):
+		if not (self.env.YOUTUBE_API_KEY and self.env.YOUTUBE_PLAYLIST_ID):
+			print("missing something")
+			return
+		print("getting playlist info")
 		next_page = None
 		page_arg = None
 		new_pages = True
@@ -296,6 +304,8 @@ class TwitchEventSub(DurableObject):
 					for item in data['items']:
 						if item.get('contentDetails') and len(item['contentDetails']) > 0:
 							video_list.append(item['contentDetails']['videoId'])
+				else:
+					print("no data from playlist fetch")
 
 				if data.get('nextPageToken'):
 					next_page = data.get('nextPageToken')
