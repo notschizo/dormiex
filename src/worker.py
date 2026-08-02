@@ -220,8 +220,6 @@ class TwitchEventSub(DurableObject):
 	async def getInitialInfo(self):
 		print("getting current state")
 		try:
-			await self.getPlaylist()
-			await self.getNextStream()
 			access_token = await self.getAccessToken()
 			client_id = self.env.TWITCH_CLIENT_ID
 			response = await fetch(
