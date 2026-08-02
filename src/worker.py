@@ -106,11 +106,16 @@ class TwitchEventSub(DurableObject):
 			error_message = getattr(event, "message", None) or "????"
 			print(f"error: {error_message}")
 
+		import asyncio
+		def bind_async(coro_func):
+			def wrapper(event):
+				asyncio.create_task(coro_func(event))
+			return wrapper
+
 		self.ws.onopen = on_open
-		self.ws.onmessage = on_message
-		self.ws.onclose = on_close
+		self.ws.onmessage = bind_async(on_message)
+		self.ws.onclose = bind_async(on_close)
 		self.ws.onerror = on_error
-		await self.storage.setAlarm(int(time.time() * 1000) + self.alarm_ms)
 
 	async def parse_message(self, message):
 		message_type = message["metadata"]["message_type"]
