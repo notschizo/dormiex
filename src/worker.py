@@ -14,7 +14,6 @@ class TwitchEventSub(DurableObject):
 		self.storage = self.state.storage
 		self.ws = None
 		self.sessionId = None
-		self.alarm_ms = 60 * 60 * 1000
 		print("we're alive probably")
 
 	async def getAccessToken(self):
@@ -56,13 +55,6 @@ class TwitchEventSub(DurableObject):
 		return data['access_token']
 
 	async def ensureConnected(self):
-		current_alarm = await self.storage.getAlarm()
-		if not current_alarm:
-			print("scheduling new alarm")
-			await self.storage.setAlarm(int(time.time() * 1000) + self.alarm_ms)
-		else:
-			print("alarm is hopefully fine")
-
 		if self.ws and getattr(self.ws, "readyState", None) == 1:
 			print("socket is open(?)")
 			return
@@ -98,8 +90,6 @@ class TwitchEventSub(DurableObject):
 		async def on_close(event):
 			await self.webhook_report(f"socket closed, code: {getattr(event, 'code', 'unknown')}, reason: {getattr(event, 'reason', 'unknown')}")
 			self.sessionId = None
-			print("scheduling new alarm")
-			await self.storage.setAlarm(int(time.time() * 1000) + 5000)
 
 		async def on_error(event):
 			if ws != self.ws:
@@ -336,12 +326,10 @@ class TwitchEventSub(DurableObject):
 			body=json.dumps(webhook_body)
 		)
 
-	async def alarm(self):
-		await self.webhook_report("checking connections(alarm)")
+	async def refresh_all(self):
 		await self.ensureConnected()
 		await self.getNextStream()
 		await self.getPlaylist()
-		await self.storage.setAlarm(int(time.time() * 1000) + self.alarm_ms)
 
 	async def fetch(self, request):
 		from js import URL, Response
@@ -403,5 +391,14 @@ class Default(WorkerEntrypoint):
 		durable_id = self.env.TWITCH_EVENTSUB.idFromName("default")
 		stub = self.env.TWITCH_EVENTSUB.get(durable_id)
 
-		await stub.fetch(Request.new("https://internal/connect"))
+		cron_pattern = controller.cron
+
+		if cron_pattern == "*/5 * * * *":
+			print("[cron]checking connection")
+			await stub.fetch(Request.new("https://internal/connect"))
+		elif cron_pattern == "0 * * * *":
+			await stub.webhook_report("[cron]getting youtube info")
+			await stub.refresh_all()
+		else:
+			await stub.webhook_report(f"[cron]invalid pattern: {cron_pattern}")
 
