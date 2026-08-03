@@ -236,7 +236,6 @@ class TwitchEventSub(DurableObject):
 			await self.webhook_report(f"error getting state: {err}")
 
 	async def getNextStream(self):
-		await self.webhook_report("getting next stream")
 		if not (self.env.YOUTUBE_API_KEY and self.env.YOUTUBE_CHANNEL_ID):
 			await self.webhook_report("missing something")
 			return
@@ -279,7 +278,6 @@ class TwitchEventSub(DurableObject):
 		if not (self.env.YOUTUBE_API_KEY and self.env.YOUTUBE_PLAYLIST_ID):
 			await self.webhook_report("missing something")
 			return
-		await self.webhook_report("getting playlist info")
 		next_page = None
 		page_arg = None
 		new_pages = True
@@ -396,9 +394,12 @@ class Default(WorkerEntrypoint):
 		if cron_pattern == "*/5 * * * *":
 			print("[cron]checking connection")
 			await stub.fetch(Request.new("https://internal/connect"))
-		elif cron_pattern == "0 * * * *":
-			await stub.webhook_report("[cron]getting youtube info")
-			await stub.refresh_all()
+		elif cron_pattern == "*/20 * * * *":
+			await stub.webhook_report("[cron]getting next stream")
+			await stub.getNextStream()
+		elif cron_pattern == "0 0 * * *":
+			await stub.webhook_report("[cron]fetching playlist info")
+			await stub.getPlaylist()
 		else:
 			await stub.webhook_report(f"[cron]invalid pattern: {cron_pattern}")
 
