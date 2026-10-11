@@ -1,0 +1,9 @@
+[project]
+name = "dormiex-i-miss-mimi"
+version = "0.1.0"
+description = "the yearn machine"
+requires-python = ">=3.13"
+dependencies = [
+	"workers-py",
+	"workers-runtime-sdk"
+]
