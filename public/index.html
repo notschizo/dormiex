@@ -26,12 +26,12 @@
 	}
 
 	let counterIndex = 0;
-	let counterArray = ["", "", "",""];
-	let counterString = ["<h1>time since last seen:</h1>","<h1>time until next stream:</h1>", "<h1>time until birthday:</h1>", "<h1>times apologized:</h1>"];
+	let counterArray = ["", "", "", "", ""];
+	let counterString = ["<h1>time since last seen:</h1>","<h1>time until next stream:</h1>", "<h1>time until birthday:</h1>", "<h1>sorry count:</h1>", "<h1>dude count:</h1>"];
 
 	function changeCounterType(direction = "right") {
     if (direction == "right") {
-        if (counterIndex < 3) {
+        if (counterIndex < 4) {
             counterIndex += 1;
         } else {
             counterIndex = 0;
@@ -40,7 +40,7 @@
         if (counterIndex > 0) {
             counterIndex -= 1;
         } else {
-            counterIndex = 3;
+            counterIndex = 4;
         }
     }
     render();
@@ -56,7 +56,8 @@
 		counterArray[1] = isLive ? "🐁"
 			: ((status.nextStream && getActualTimeDifference(streamDate) > 0 && getActualTimeDifference(streamDate) < 15780000000) ? getNextStreamTime(streamDate) : "where mimi???????????");
 		counterArray[2] = getBirthdayCountdown();
-		counterArray[3] = status.sorryCount;
+		counterArray[3] = status.sorryCount ? 0;
+		counterArray[4] = status.dudeCount ? 0;
 
 		timerLabel.innerHTML = counterString[counterIndex];
 		actualTimer.innerHTML = counterArray[counterIndex];

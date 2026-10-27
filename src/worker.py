@@ -138,12 +138,18 @@ class TwitchEventSub(DurableObject):
 				if event["chatter_user_id"] == "19264788":
 					message_text = event["message"]["text"]
 
-					match = re.search(r"nemimi has apologized (\d+) times!", message_text)
+					sorry_match = re.search(r"nemimi has apologized (\d+) times!", message_text)
+					dude_match = re.search(r"nemimi has said dude (\d+) times!", message_text)
 
-					if match:
+
+					if sorry_match:
 						sorry_count = match.group(1)
 						await self.webhook_report(f"new sorry count: {sorry_count}")
 						await self.env.STREAM_DATA.put("sorry_count", sorry_count)
+					elif dude_match:
+						dude_count = dude_match.group(1)
+						await self.webhook_report(f"new dude count: {dude_count}")
+						await self.env.STREAM_DATA.put("dude_count", dude_count)
 			elif sub_type == "session_keepalive":
 				pass
 
@@ -348,12 +354,13 @@ class Default(WorkerEntrypoint):
 
 		if url.pathname == "/api/status":
 			import asyncio
-			is_live, offline_timestamp, sorry_count, next_stream, playlist_items_raw = await asyncio.gather(
+			is_live, offline_timestamp, sorry_count, next_stream, playlist_items_raw, dude_count = await asyncio.gather(
 				self.env.STREAM_DATA.get('is_live'),
 				self.env.STREAM_DATA.get('offline_timestamp'),
 				self.env.STREAM_DATA.get('sorry_count'),
 				self.env.STREAM_DATA.get('next_stream'),
-				self.env.STREAM_DATA.get('playlist_items')
+				self.env.STREAM_DATA.get('playlist_items'),
+				self.env.STREAM_DATA.get('dude_count')
 			)
 
 			response_data = {
@@ -361,7 +368,8 @@ class Default(WorkerEntrypoint):
 				"offlineTimestamp": offline_timestamp,
 				"sorryCount": sorry_count,
 				"nextStream": next_stream,
-				"playlist": json.loads(playlist_items_raw) if playlist_items_raw else []
+				"playlist": json.loads(playlist_items_raw) if playlist_items_raw else [],
+				"dudeCount": dude_count
 			}
 
 			return Response.new(
