@@ -18,16 +18,14 @@ function getOffset() {
 	return timeDifference;
 }
 
-function getBirthDate() {
+function getRealDate(month, day) {
 	let currentTimeStamp = new Date();
 	let timezoneOffset = getOffset();
 
 	let currentYear = currentTimeStamp.getFullYear();
-	let birthMonth = 6;
-	let birthDay = 18;
 
-	let birthdayMilliseconds = Date.UTC(currentYear, birthMonth, birthDay, 0 - timezoneOffset, 0, 0);
-	return new Date(birthdayMilliseconds);
+	let dateMilliseconds = Date.UTC(currentYear, month, day, 0 - timezoneOffset, 0, 0);
+	return new Date(dateMilliseconds);
 }
 
 export async function fetchStreamStatus() {
@@ -49,16 +47,16 @@ export function getNextStreamTime(streamDate) {
 }
 
 
-export function getBirthdayCountdown() {
+export function getCountdown(month, day) {
 	let currentTimeStamp = new Date();
-	let thisBirthday = getBirthDate()
-	let timeToBirthday = thisBirthday - currentTimeStamp
+	let thisTarget = getRealDate(month, day)
+	let timeToTarget = thisTarget - currentTimeStamp
 
-	if (timeToBirthday > -86400000 && timeToBirthday < 0) {
+	if (timeToTarget > -86400000 && timeToTarget < 0) {
 		return "🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉"
 	} else {
-		let actualBirthday = checkPassedBirthday(thisBirthday)
-		return formatTimeStamp(getTheAmountOfTimeBetweenTheThingAndTheNextThing(actualBirthday));
+		let actualTarget = checkPassedDate(thisTarget)
+		return formatTimeStamp(getTheAmountOfTimeBetweenTheThingAndTheNextThing(actualTarget));
 	}
 
 }
@@ -75,14 +73,14 @@ function getTheAmountOfTimeBetweenTheThingAndTheNextThing(date) {
 	return offset;
 }
 
-function checkPassedBirthday(birthDate) {
+function checkPassedTarget(targetDate) {
 	let currentTimeStamp = new Date();
 	let currentYear = currentTimeStamp.getFullYear();
-	let birthdayPassed = currentTimeStamp >= birthDate;
-	if (birthdayPassed) {
-		birthDate.setFullYear(currentYear + 1);
+	let targetPassed = currentTimeStamp >= targetDate;
+	if (targetPassed) {
+		targetDate.setFullYear(currentYear + 1);
 	}
-	return birthDate;
+	return targetDate;
 }
 
 function getTimeIntervals(milliseconds) {
