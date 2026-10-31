@@ -73,7 +73,7 @@ function getTheAmountOfTimeBetweenTheThingAndTheNextThing(date) {
 	return offset;
 }
 
-function checkPassedTarget(targetDate) {
+function checkPassedDate(targetDate) {
 	let currentTimeStamp = new Date();
 	let currentYear = currentTimeStamp.getFullYear();
 	let targetPassed = currentTimeStamp >= targetDate;
